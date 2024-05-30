@@ -2,21 +2,19 @@
 import texts from "@/texts"
 import { ref } from "vue"
 import type { CredentialsT } from "@/types"
+import doAxios from "@/utils/doAxios"
+import { forgotPassword, login } from "@/utils/auth"
 
 const btnItems = [
   {
     label: texts.login.splitBtn.forgotPassword,
     command: () => {
-      //
+      forgotPassword()
     },
   },
 ]
 
-const crendentials = ref<CredentialsT>({ email: "", password: "" })
-
-const login = () => {
-  //
-}
+const credentials = ref<CredentialsT>({ email: "", password: "" })
 </script>
 
 <template>
@@ -29,17 +27,17 @@ const login = () => {
         <InputText
           autofocus
           :placeholder="texts.login.inputs.email"
-          v-model="crendentials.email"
+          v-model="credentials.email"
         />
         <Password
           :feedback="false"
           :placeholder="texts.login.inputs.password"
+          v-model="credentials.password"
         />
         <SplitButton
-          @click="login"
+          @click="() => login(credentials)"
           :label="texts.login.splitBtn.loginLabel"
           :model="btnItems"
-          v-model="crendentials.password"
         />
       </div>
     </div>

@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router"
-import HomeView from "@/views/HomeView.vue"
 import LoginView from "@/views/login/LoginView.vue"
 import dashboardRoutes from "@/router/dashboardRoutes"
 
@@ -9,10 +8,8 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: HomeView,
-      meta: {
-        title: "Home",
-        reqAuth: false,
+      redirect: {
+        name: "login",
       },
     },
     {
@@ -30,8 +27,23 @@ const router = createRouter({
       component: () => import("@/layouts/DashboardLayout.vue"),
       meta: {
         reqAuth: true,
+        title: "Dashboard",
       },
       children: dashboardRoutes,
+    },
+    {
+      path: "/404",
+      name: "404",
+      component: () => import("@/views/_documentErrors/ErrorDocument404.vue"),
+      meta: {
+        title: "404",
+      },
+    },
+    {
+      path: "/:pathMatch(.*)",
+      redirect: {
+        name: "404",
+      },
     },
   ],
 })

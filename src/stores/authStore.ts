@@ -3,7 +3,6 @@ import type { CredentialsT, UserT } from "@/types"
 import doAxios from "@/utils/doAxios"
 import router from "@/router"
 import { HttpStatusE } from "@/types/enums"
-import log from "@/utils/log"
 
 const authStore = defineStore("authStore", {
   state: () => ({
@@ -38,8 +37,6 @@ const authStore = defineStore("authStore", {
             loginError = error.response?.data?.message
           })
       })
-
-      log(loginError, "loginError")
 
       return loginError
     },

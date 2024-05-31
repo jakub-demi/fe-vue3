@@ -57,8 +57,9 @@ const hideErrors = () => (loginErrors.value = undefined)
           v-if="loginErrors"
           severity="error"
           @close="hideErrors"
-          >{{ loginErrors }}</Message
         >
+          {{ loginErrors }}
+        </Message>
         <div
           v-else
           class="mb-10"

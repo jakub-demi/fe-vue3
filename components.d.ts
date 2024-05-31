@@ -19,6 +19,8 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     Sidebar: typeof import('primevue/sidebar')['default']
     SplitButton: typeof import('primevue/splitbutton')['default']
+    TabPanel: typeof import('primevue/tabpanel')['default']
+    TabView: typeof import('primevue/tabview')['default']
     UserProfileMenu: typeof import('./src/components/_layout/topbar/UserProfileMenu.vue')['default']
   }
 }

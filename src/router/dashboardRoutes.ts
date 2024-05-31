@@ -1,5 +1,6 @@
-import DashboardView from "@/views/dashboard/DashboardView.vue"
 import type { RouteRecordRaw } from "vue-router"
+import DashboardView from "@/views/dashboard/DashboardView.vue"
+import ProfileView from "@/views/dashboard/profile/ProfileView.vue"
 
 const dashboardRoutes: RouteRecordRaw[] = [
   {
@@ -8,6 +9,14 @@ const dashboardRoutes: RouteRecordRaw[] = [
     component: DashboardView,
     meta: {
       title: "Dashboard",
+    },
+  },
+  {
+    path: "profile",
+    name: "profile",
+    component: ProfileView,
+    meta: {
+      title: "User Profile",
     },
   },
   {

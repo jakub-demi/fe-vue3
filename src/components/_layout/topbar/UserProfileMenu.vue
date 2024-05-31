@@ -4,6 +4,7 @@ import type { MenuItem } from "primevue/menuitem"
 import type { InteractEventT } from "@/types"
 import texts from "@/texts"
 import authStore from "@/stores/authStore"
+import router from "@/router"
 
 const userMenu = ref()
 const auth = authStore()
@@ -18,7 +19,11 @@ const userMenuItems: MenuItem[] = [
     label: texts.dashboardLayout.topbar.userProfileMenu.sections.userMenu,
     items: [
       {
-        label: "<TBD>",
+        label: texts.dashboardLayout.topbar.userProfileMenu.items.userMenu.profile,
+        icon: "pi pi-user",
+        command: () => {
+          router.push({ name: "profile" })
+        },
       },
     ],
   },

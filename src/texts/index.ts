@@ -27,6 +27,9 @@ const texts = {
           auth: "Authentication",
         },
         items: {
+          userMenu: {
+            profile: "User Profile",
+          },
           auth: {
             logout: "Logout",
           },

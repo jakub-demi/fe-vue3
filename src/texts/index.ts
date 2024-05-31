@@ -20,6 +20,19 @@ const texts = {
   },
   dashboardLayout: {
     menu: "Menu",
+    topbar: {
+      userProfileMenu: {
+        sections: {
+          userMenu: "User Menu",
+          auth: "Authentication",
+        },
+        items: {
+          auth: {
+            logout: "Logout",
+          },
+        },
+      },
+    },
   },
 }
 export default texts

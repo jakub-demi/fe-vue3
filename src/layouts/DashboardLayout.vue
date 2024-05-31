@@ -7,6 +7,7 @@ import MobileMenu from "@/components/_layout/MobileMenu.vue"
 import { ref } from "vue"
 import { useRoute } from "vue-router"
 import texts from "@/texts"
+import UserProfileMenu from "@/components/_layout/topbar/UserProfileMenu.vue"
 
 const route = useRoute()
 const routeTitle: string = (route.meta.title as string | undefined) ?? "Dashboard"
@@ -56,10 +57,7 @@ const showMobileMenu = () => {
           </button>
 
           <div class="[--placement:bottom-right] relative inline-flex">
-            <Avatar
-              class="cursor-pointer hover:bg-primary-100"
-              label="TA"
-            />
+            <UserProfileMenu />
           </div>
         </div>
       </div>

@@ -2,10 +2,12 @@
 import { ref } from "vue"
 import type { MenuItem } from "primevue/menuitem"
 import type { InteractEventT } from "@/types"
-import { logout } from "@/utils/auth"
 import texts from "@/texts"
+import authStore from "@/stores/authStore"
 
 const userMenu = ref()
+const auth = authStore()
+const logout = () => auth.logout()
 
 const userMenuToggle = (event: InteractEventT) => {
   userMenu.value.toggle(event)

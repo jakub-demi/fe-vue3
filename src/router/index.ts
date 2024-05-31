@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router"
 import LoginView from "@/views/login/LoginView.vue"
 import dashboardRoutes from "@/router/dashboardRoutes"
+import authStore from "@/stores/authStore"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -48,10 +49,23 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach((to, from) => {
+router.beforeEach(async (to, from) => {
   to.meta.title &&
     (document.title =
       (to.meta.title as string) + " | " + (import.meta.env.VITE_PUBLIC_APP_NAME ?? "App"))
+
+  const auth = authStore()
+  const user = await auth.checkLoginState()
+
+  if (!user && to.fullPath.includes("dashboard")) {
+    return { name: "login" }
+  }
+
+  if (user && to.name === "login") {
+    return { name: "dashboard" }
+  }
 })
+
+router.afterEach((to) => {})
 
 export default router

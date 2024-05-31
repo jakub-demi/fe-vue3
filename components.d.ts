@@ -11,6 +11,7 @@ declare module 'vue' {
     InputText: typeof import('primevue/inputtext')['default']
     LeftMenu: typeof import('./src/components/_layout/LeftMenu.vue')['default']
     Menu: typeof import('primevue/menu')['default']
+    Message: typeof import('primevue/message')['default']
     MobileMenu: typeof import('./src/components/_layout/MobileMenu.vue')['default']
     PanelMenu: typeof import('primevue/panelmenu')['default']
     Password: typeof import('primevue/password')['default']

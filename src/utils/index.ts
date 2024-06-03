@@ -1,5 +1,5 @@
 import { useToast } from "primevue/usetoast"
-import type { SeverityT } from "@/types"
+import type { SeverityT, UserT } from "@/types"
 import type { AxiosError, AxiosResponse } from "axios"
 import type { Ref } from "vue"
 
@@ -25,7 +25,7 @@ export const handleResData = <T>(
   showToast && setToast(response.data.message)
 }
 
-export const handleInputErrors = <T>(error: AxiosError, ref: Ref<T>) => {
+export const handleInputErrors = <T>(error: AxiosError, ref: Ref<T>, showToast: boolean = true) => {
   const errData = error.response?.data as {
     errors: { [key: string]: string[] }
     message: string
@@ -44,7 +44,7 @@ export const handleInputErrors = <T>(error: AxiosError, ref: Ref<T>) => {
 
   ref.value = errors as T
 
-  setToast(message, "error")
+  showToast && setToast(message, "error")
 }
 
 export const formatDate = (datetime: Date | string): string => {
@@ -69,4 +69,31 @@ export const getUserInitials = (fullName: string): string => {
     return part.substring(0, 1).toUpperCase()
   })
   return initials.toString().replace(/,/g, "")
+}
+
+export const getUserAvatar = (user?: UserT | null) => {
+  return user?.avatar?.image && import.meta.env.VITE_PUBLIC_API_BASE_URL
+    ? import.meta.env.VITE_PUBLIC_API_BASE_URL + "/" + user.avatar.image
+    : undefined
+}
+
+export const buildFilesFormData = (data: object, ignoredFileKeys?: string[]): FormData => {
+  const formData = new FormData()
+
+  if (ignoredFileKeys) {
+    for (const key in data) {
+      const value = (data as Record<string, any>)[key]
+
+      if (!(ignoredFileKeys.includes(key) && !(value instanceof File))) {
+        formData.append(key, value)
+      }
+    }
+  } else {
+    for (const key in data) {
+      const value = (data as Record<string, any>)[key]
+      formData.append(key, value)
+    }
+  }
+
+  return formData
 }

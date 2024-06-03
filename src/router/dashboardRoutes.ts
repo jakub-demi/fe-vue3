@@ -19,13 +19,13 @@ const dashboardRoutes: RouteRecordRaw[] = [
       title: "User Profile",
     },
   },
-  {
-    path: "test",
-    name: "test",
-    component: () => import("@/views/_t/TheTest.vue"),
-    meta: {
-      title: "Test",
-    },
-  },
+  // {
+  //   path: "test",
+  //   name: "test",
+  //   component: () => import("@/views/_t/TheTest.vue"),
+  //   meta: {
+  //     title: "Test",
+  //   },
+  // },
 ]
 export default dashboardRoutes

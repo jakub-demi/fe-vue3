@@ -8,6 +8,12 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Avatar: typeof import('primevue/avatar')['default']
+    Button: typeof import('primevue/button')['default']
+    CreateButton: typeof import('./src/components/_common/form/CreateButton.vue')['default']
+    FButton: typeof import('./src/components/_common/form/FButton.vue')['default']
+    InlineMessage: typeof import('primevue/inlinemessage')['default']
+    InputError: typeof import('./src/components/_common/form/InputError.vue')['default']
+    InputField: typeof import('./src/components/_common/form/InputField.vue')['default']
     InputText: typeof import('primevue/inputtext')['default']
     LeftMenu: typeof import('./src/components/_layout/LeftMenu.vue')['default']
     Menu: typeof import('primevue/menu')['default']
@@ -17,10 +23,14 @@ declare module 'vue' {
     Password: typeof import('primevue/password')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SaveButton: typeof import('./src/components/_common/form/SaveButton.vue')['default']
     Sidebar: typeof import('primevue/sidebar')['default']
     SplitButton: typeof import('primevue/splitbutton')['default']
     TabPanel: typeof import('primevue/tabpanel')['default']
     TabView: typeof import('primevue/tabview')['default']
+    TextField: typeof import('./src/components/_common/form/TextField.vue')['default']
+    TheButton: typeof import('./src/components/_common/form/TheButton.vue')['default']
+    UpdateButton: typeof import('./src/components/_common/form/UpdateButton.vue')['default']
     UserProfileMenu: typeof import('./src/components/_layout/topbar/UserProfileMenu.vue')['default']
   }
 }

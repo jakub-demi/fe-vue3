@@ -19,3 +19,12 @@ export type UserT = {
   is_admin: boolean
   avatar?: UserAvatarT
 }
+
+export type UserErrorT = {
+  email?: string
+  firstname?: string
+  lastname?: string
+  avatar?: string
+}
+
+export type SeverityT = "success" | "info" | "warn" | "error" | "secondary" | "contrast"

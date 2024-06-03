@@ -37,5 +37,20 @@ const texts = {
       },
     },
   },
+  views: {
+    userProfileMenu: {
+      profile: {
+        email: "Email",
+        firstname: "First Name",
+        lastname: "Last Name",
+        avatar: "Avatar",
+      },
+    },
+  },
+  buttons: {
+    save: "Save",
+    update: "Update",
+    create: "Create",
+  },
 }
 export default texts

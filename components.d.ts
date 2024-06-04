@@ -9,6 +9,8 @@ declare module 'vue' {
   export interface GlobalComponents {
     Avatar: typeof import('primevue/avatar')['default']
     Button: typeof import('primevue/button')['default']
+    Column: typeof import('primevue/column')['default']
+    DataTable: typeof import('primevue/datatable')['default']
     FileInput: typeof import('./src/components/_common/form/FileInput.vue')['default']
     FileUpload: typeof import('primevue/fileupload')['default']
     ChangePasswordTab: typeof import('./src/components/pages/dashboard/profile/ProfileView/ChangePasswordTab.vue')['default']

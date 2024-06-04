@@ -17,6 +17,7 @@ const texts = {
   },
   leftMenu: {
     dashboard: "Dashboard",
+    orders: "Orders",
   },
   dashboardLayout: {
     menu: "Menu",

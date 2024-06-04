@@ -14,7 +14,7 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
     "lint": "eslint . --ext .vue,.js,.cjs,.mjs,.ts,.cts,.mts --fix --ignore-path .gitignore",
-    "format": "prettier --write --ignore-unknown src/",
+    "format": "prettier --write --ignore-unknown \"src/**/*.{vue,ts}\"",
     "prepare": "husky"
   },
   "dependencies": {

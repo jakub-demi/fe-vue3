@@ -27,11 +27,39 @@ const texts = {
           auth: "Authentication",
         },
         items: {
+          userMenu: {
+            profile: "User Profile",
+          },
           auth: {
             logout: "Logout",
           },
         },
       },
+    },
+  },
+  views: {
+    profileView: {
+      profile: {
+        email: "Email",
+        firstname: "First Name",
+        lastname: "Last Name",
+        chooseAvatar: "Choose Avatar",
+      },
+      changePassword: {
+        currentPassword: "Current Password",
+        newPassword: "New Password",
+        newPasswordConfirmation: "New Password Again",
+      },
+    },
+  },
+  buttons: {
+    save: "Save",
+    update: "Update",
+    create: "Create",
+  },
+  form: {
+    fileInput: {
+      chooseLabel: "Select File",
     },
   },
 }

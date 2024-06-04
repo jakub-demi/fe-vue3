@@ -4,6 +4,8 @@ import type { MenuItem } from "primevue/menuitem"
 import type { InteractEventT } from "@/types"
 import texts from "@/texts"
 import authStore from "@/stores/authStore"
+import router from "@/router"
+import { getUserAvatar, getUserInitials } from "@/utils"
 
 const userMenu = ref()
 const auth = authStore()
@@ -18,7 +20,11 @@ const userMenuItems: MenuItem[] = [
     label: texts.dashboardLayout.topbar.userProfileMenu.sections.userMenu,
     items: [
       {
-        label: "<TBD>",
+        label: texts.dashboardLayout.topbar.userProfileMenu.items.userMenu.profile,
+        icon: "pi pi-user",
+        command: () => {
+          router.push({ name: "profile" })
+        },
       },
     ],
   },
@@ -39,9 +45,11 @@ const userMenuItems: MenuItem[] = [
 
 <template>
   <Avatar
-    class="cursor-pointer hover:bg-primary-100"
-    label="TBD"
+    class="cursor-pointer hover:bg-primary-100 border-2 border-black bg-white"
+    :label="!getUserAvatar() ? getUserInitials() : undefined"
+    :image="getUserAvatar() ? getUserAvatar() : undefined"
     @click="userMenuToggle"
+    shape="circle"
     aria-haspopup="true"
     aria-controls="user_menu"
   />

@@ -8,6 +8,7 @@ import { ref } from "vue"
 import { useRoute } from "vue-router"
 import texts from "@/texts"
 import UserProfileMenu from "@/components/_layout/topbar/UserProfileMenu.vue"
+import { getAppName } from "@/utils"
 
 const route = useRoute()
 const routeTitle: string = (route.meta.title as string | undefined) ?? "Dashboard"
@@ -25,8 +26,6 @@ const showMobileMenu = () => {
     :handle-change="showMobileMenu"
   />
 
-  <Toast />
-
   <!-- ========== HEADER ========== -->
   <header
     class="sticky top-0 inset-x-0 flex flex-wrap sm:justify-start sm:flex-nowrap z-[48] w-full bg-white border-b text-sm py-2.5 sm:py-4 lg:ps-64"
@@ -40,7 +39,7 @@ const showMobileMenu = () => {
         <a
           class="flex-none rounded-xl text-xl inline-block font-semibold focus:outline-none focus:opacity-80"
         >
-          {{ routeTitle }}
+          {{ getAppName() }}
         </a>
         <!-- End Title <mobile only> -->
       </div>
@@ -48,7 +47,9 @@ const showMobileMenu = () => {
       <div
         class="w-full flex items-center justify-end ms-auto sm:justify-between sm:gap-x-3 sm:order-3"
       >
-        <div class="hidden sm:block" />
+        <div class="hidden sm:block font-bold">
+          {{ routeTitle }}
+        </div>
 
         <div class="flex flex-row items-center justify-end gap-2">
           <button
@@ -58,7 +59,7 @@ const showMobileMenu = () => {
             <BellIcon class="size-6" />
           </button>
 
-          <div class="[--placement:bottom-right] relative inline-flex">
+          <div class="relative inline-flex">
             <UserProfileMenu />
           </div>
         </div>
@@ -71,7 +72,9 @@ const showMobileMenu = () => {
   <!-- Mobile Menu -->
   <div class="sticky top-0 inset-x-0 z-20 bg-white border-y px-4 sm:px-6 md:px-8 lg:hidden">
     <div class="flex justify-between items-center py-2">
-      <div />
+      <div class="font-bold">
+        {{ routeTitle }}
+      </div>
 
       <!-- Sidebar Button -->
       <button
@@ -97,7 +100,7 @@ const showMobileMenu = () => {
       <a
         class="flex-none rounded-xl text-xl inline-block font-semibold focus:outline-none focus:opacity-80"
       >
-        {{ routeTitle }}
+        {{ getAppName() }}
       </a>
       <!-- End Title -->
     </div>

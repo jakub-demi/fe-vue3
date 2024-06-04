@@ -38,12 +38,17 @@ const texts = {
     },
   },
   views: {
-    userProfileMenu: {
+    profileView: {
       profile: {
         email: "Email",
         firstname: "First Name",
         lastname: "Last Name",
-        avatar: "Avatar",
+        chooseAvatar: "Choose Avatar",
+      },
+      changePassword: {
+        currentPassword: "Current Password",
+        newPassword: "New Password",
+        newPasswordConfirmation: "New Password Again",
       },
     },
   },
@@ -51,6 +56,11 @@ const texts = {
     save: "Save",
     update: "Update",
     create: "Create",
+  },
+  form: {
+    fileInput: {
+      chooseLabel: "Select File",
+    },
   },
 }
 export default texts

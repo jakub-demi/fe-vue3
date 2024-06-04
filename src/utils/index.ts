@@ -1,17 +1,19 @@
-import { useToast } from "primevue/usetoast"
-import type { SeverityT, UserT } from "@/types"
+import type { SeverityT } from "@/types"
 import type { AxiosError, AxiosResponse } from "axios"
 import type { Ref } from "vue"
+import authStore from "@/stores/authStore"
+import log from "@/utils/log"
+import toastServiceStore from "@/stores/toastServiceStore"
 
-export const setToast = (message: string, severity?: SeverityT, title?: string) => {
-  const toast = useToast()
+export const setToast = (message: string, severity?: SeverityT, title?: string, life?: number) => {
+  const toast = toastServiceStore().toast
+  if (!toast) return
 
   toast.add({
-    severity: severity,
+    severity: severity ?? "success",
     summary: title ?? severity === "error" ? "Failure" : "Info",
     detail: message,
-    life: 3000,
-    group: "br",
+    life: life && life > 0 ? life : 3000,
   })
 }
 
@@ -63,7 +65,9 @@ export const formatDate = (datetime: Date | string): string => {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
 }
 
-export const getUserInitials = (fullName: string): string => {
+export const getUserInitials = (): string => {
+  const fullName = authStore().getUser?.fullName
+  if (!fullName) return ""
   const parts = fullName.split(" ")
   const initials = parts.map((part) => {
     return part.substring(0, 1).toUpperCase()
@@ -71,7 +75,9 @@ export const getUserInitials = (fullName: string): string => {
   return initials.toString().replace(/,/g, "")
 }
 
-export const getUserAvatar = (user?: UserT | null) => {
+export const getUserAvatar = () => {
+  const user = authStore().getUser
+
   return user?.avatar?.image && import.meta.env.VITE_PUBLIC_API_BASE_URL
     ? import.meta.env.VITE_PUBLIC_API_BASE_URL + "/" + user.avatar.image
     : undefined
@@ -96,4 +102,8 @@ export const buildFilesFormData = (data: object, ignoredFileKeys?: string[]): Fo
   }
 
   return formData
+}
+
+export const getAppName = (): string => {
+  return import.meta.env.VITE_PUBLIC_APP_NAME ?? "App"
 }

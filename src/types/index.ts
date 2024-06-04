@@ -20,6 +20,13 @@ export type UserT = {
   avatar?: UserAvatarT
 }
 
+export type UpdateProfileFormT = {
+  email?: string
+  firstname?: string
+  lastname?: string
+  avatar?: File
+}
+
 export type UserErrorT = {
   email?: string
   firstname?: string
@@ -28,3 +35,15 @@ export type UserErrorT = {
 }
 
 export type SeverityT = "success" | "info" | "warn" | "error" | "secondary" | "contrast"
+
+export type ChangePasswordT = {
+  current_password: string
+  password: string
+  password_confirmation: string
+}
+
+export type ChangePasswordErrorsT = {
+  current_password?: string
+  password?: string
+  password_confirmation?: string
+}

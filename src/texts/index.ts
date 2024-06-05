@@ -17,7 +17,11 @@ const texts = {
   },
   leftMenu: {
     dashboard: "Dashboard",
-    orders: "Orders",
+    orders: {
+      index: "Orders",
+      all: "All Orders",
+      create: "Create Order",
+    },
   },
   dashboardLayout: {
     menu: "Menu",

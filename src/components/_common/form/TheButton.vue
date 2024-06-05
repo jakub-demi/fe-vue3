@@ -27,6 +27,10 @@ const props = defineProps({
     required: false,
     default: false,
   },
+  icon: {
+    type: String,
+    required: false,
+  },
 })
 
 const getType = (): "submit" | "button" => {
@@ -53,6 +57,10 @@ const getText = (): string | undefined => {
   }
 }
 
+const showIcon = (): boolean => {
+  return !props.loading && props.icon !== undefined
+}
+
 const clickHandler = (event: InteractEventT) => {
   if (!props.handleClick) return
 
@@ -70,6 +78,10 @@ const clickHandler = (event: InteractEventT) => {
     <span
       v-if="loading"
       class="pi pi-spin pi-spinner mr-1"
+    />
+    <span
+      v-if="showIcon()"
+      :class="[icon, 'mr-1']"
     />
     {{ text ?? getText() ?? "" }}
   </Button>

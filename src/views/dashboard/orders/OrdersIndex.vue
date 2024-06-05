@@ -1,37 +1,25 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
-import doAxios from "@/utils/doAxios"
-import { formatDate, getAvatarForUser, getInitialsForUser, setErrorToast } from "@/utils"
-import type { OrderDataTableT, OrdersTableSlotPropsT, OrderT } from "@/types"
+import { getAvatarForUser, getInitialsForUser } from "@/utils"
+import type { OrderDataTableT, OrdersTableSlotPropsT, UserT } from "@/types"
 import { CheckIcon, XMarkIcon } from "@heroicons/vue/24/outline"
 import IconSizeWrap from "@/components/icons/IconSizeWrap.vue"
 import ActionsMenu from "@/components/dataTable/ActionsMenu.vue"
 import DataGrid from "@/components/dataTable/DataGrid.vue"
+import { getOrders } from "@/utils/services/orders"
 
-const orders = ref<OrderT[]>([])
 const ordersTable = ref<OrderDataTableT[]>([])
 const loading = ref<boolean>(true)
 
 onMounted(() => {
-  doAxios("/orders", "get", true)
-    .then((res) => {
-      orders.value = res.data.data
-
-      ordersTable.value = orders.value.map((order) => ({
-        id: order.id,
-        order_number: order.order_number,
-        due_date: formatDate(order.due_date),
-        payment_date: order.payment_date ? formatDate(order.payment_date) : null,
-        created_at: formatDate(order.created_at),
-        has_access: order.has_access,
-        order_users: order.order_users,
-      }))
-    })
-    .catch((err) => {
-      setErrorToast(err.response.data.message)
-    })
-    .finally(() => (loading.value = false))
+  getOrders(ordersTable, loading)
 })
+
+const excessiveUsers = (orderUsers: UserT[]): string => {
+  const usersWhichAreLeft = orderUsers.length - 3
+
+  return `+${usersWhichAreLeft}`
+}
 
 const showOrderItems = (id: number) => {
   //todo:dev add order items - router.push({name: 'order-items', params: { id: /*slotProps.data.*/id }})
@@ -47,6 +35,7 @@ const showOrderStatusHistory = (id: number) => {
     <DataGrid
       :value="ordersTable"
       :loading="loading"
+      create-btn-target="orders"
     >
       <Column
         :sortable="true"
@@ -98,7 +87,7 @@ const showOrderStatusHistory = (id: number) => {
             />
             <Avatar
               v-if="slotProps.data.order_users.length > 3"
-              label=""
+              :label="excessiveUsers(slotProps.data.order_users)"
               shape="circle"
               size="large"
             />

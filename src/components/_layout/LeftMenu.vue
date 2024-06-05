@@ -12,11 +12,22 @@ const items: MenuItem[] = [
     },
   },
   {
-    label: texts.leftMenu.orders,
+    label: texts.leftMenu.orders.index,
     icon: "pi pi-shopping-cart",
-    command: () => {
-      router.push({ name: "orders" })
-    },
+    items: [
+      {
+        label: texts.leftMenu.orders.all,
+        command: () => {
+          router.push({ name: "orders" })
+        },
+      },
+      {
+        label: texts.leftMenu.orders.create,
+        command: () => {
+          router.push({ name: "orders.create" })
+        },
+      },
+    ],
   },
   {
     label: "Test Items",

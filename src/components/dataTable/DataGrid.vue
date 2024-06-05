@@ -2,7 +2,7 @@
 defineSlots()
 
 type PropsT = {
-  value: []
+  value: unknown[]
   loading?: boolean
 }
 

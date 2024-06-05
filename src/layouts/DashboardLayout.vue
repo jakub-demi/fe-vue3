@@ -4,20 +4,27 @@ import LeftMenu from "@/components/_layout/LeftMenu.vue"
 import BellIcon from "@heroicons/vue/24/outline/BellIcon"
 import Bars3Icon from "@heroicons/vue/24/outline/Bars3Icon"
 import MobileMenu from "@/components/_layout/MobileMenu.vue"
-import { ref } from "vue"
+import { onMounted, ref, watch } from "vue"
 import { useRoute } from "vue-router"
 import texts from "@/texts"
 import UserProfileMenu from "@/components/_layout/topbar/UserProfileMenu.vue"
 import { getAppName } from "@/utils"
 
 const route = useRoute()
-const routeTitle: string = (route.meta.title as string | undefined) ?? "Dashboard"
+const routeTitle = ref<string>("Dashboard")
 
 const mobileVisible = ref(false)
 
 const showMobileMenu = () => {
   mobileVisible.value = !mobileVisible.value
 }
+
+const updateRouteTitle = () => {
+  routeTitle.value = (route.meta.title as string | undefined) ?? "Dashboard"
+}
+
+onMounted(updateRouteTitle)
+watch(route, updateRouteTitle)
 </script>
 
 <template>
@@ -47,7 +54,7 @@ const showMobileMenu = () => {
       <div
         class="w-full flex items-center justify-end ms-auto sm:justify-between sm:gap-x-3 sm:order-3"
       >
-        <div class="hidden sm:block font-bold">
+        <div class="hidden sm:block text-lg">
           {{ routeTitle }}
         </div>
 
@@ -72,7 +79,7 @@ const showMobileMenu = () => {
   <!-- Mobile Menu -->
   <div class="sticky top-0 inset-x-0 z-20 bg-white border-y px-4 sm:px-6 md:px-8 lg:hidden">
     <div class="flex justify-between items-center py-2">
-      <div class="font-bold">
+      <div class="text-lg">
         {{ routeTitle }}
       </div>
 

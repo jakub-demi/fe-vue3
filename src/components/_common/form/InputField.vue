@@ -18,7 +18,7 @@ defineProps({
   },
 })
 const input = defineModel("input", { type: String, required: true })
-const error = defineModel("error", { type: Array<String>, required: false })
+const error = defineModel("error", { type: Array<string>, required: false })
 
 const clearError = () => error.value && (error.value = undefined)
 </script>
@@ -32,6 +32,7 @@ const clearError = () => error.value && (error.value = undefined)
       v-model="input"
       :type="inputType"
       @keydown="clearError"
+      :invalid="error && error.length > 0"
     />
     <InlineMessage
       v-if="error && error.length > 0"

@@ -1,3 +1,5 @@
+import { isRef } from "vue"
+
 const logColors = {
   red: "31",
   green: "32",
@@ -28,7 +30,9 @@ const log = (data: any, message: string = "value", color?: logColor, devOnly: bo
 
   const logColor = color ? logColors[color] : message.toLowerCase().includes("store") ? "93" : "32"
 
-  console.log(`\x1b[${logColor}m%s\x1b[0m`, `------- <log> -------\n`, `${message}:`, data)
+  const _data = isRef(data) ? data.value : data
+
+  console.log(`\x1b[${logColor}m%s\x1b[0m`, `------- <log> -------\n`, `${message}:`, _data)
 }
 
 export default log

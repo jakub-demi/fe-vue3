@@ -1,9 +1,10 @@
-import type { SeverityT } from "@/types"
+import type { SeverityT, UserT } from "@/types"
 import type { AxiosError, AxiosResponse } from "axios"
 import type { Ref } from "vue"
 import authStore from "@/stores/authStore"
 import log from "@/utils/log"
 import toastServiceStore from "@/stores/toastServiceStore"
+import texts from "@/texts"
 
 export const setToast = (message: string, severity?: SeverityT, title?: string, life?: number) => {
   const toast = toastServiceStore().toast
@@ -15,6 +16,14 @@ export const setToast = (message: string, severity?: SeverityT, title?: string, 
     detail: message,
     life: life && life > 0 ? life : 3000,
   })
+}
+
+export const setErrorToast = (message: string, life?: number, title?: string) => {
+  setToast(message, "error", title, life)
+}
+
+export const setAccessDeniedToast = () => {
+  setErrorToast(texts.toast.errors.access_denied)
 }
 
 export const handleResData = <T>(
@@ -66,9 +75,14 @@ export const formatDate = (datetime: Date | string): string => {
 }
 
 export const getUserInitials = (): string => {
-  const fullName = authStore().getUser?.fullName
-  if (!fullName) return ""
-  const parts = fullName.split(" ")
+  const user = authStore().getUser
+  if (!user) return ""
+
+  return getInitialsForUser(user)
+}
+
+export const getInitialsForUser = (user: UserT): string => {
+  const parts = user.fullName.split(" ")
   const initials = parts.map((part) => {
     return part.substring(0, 1).toUpperCase()
   })
@@ -78,6 +92,10 @@ export const getUserInitials = (): string => {
 export const getUserAvatar = () => {
   const user = authStore().getUser
 
+  return getAvatarForUser(user)
+}
+
+export const getAvatarForUser = (user: UserT | null) => {
   return user?.avatar?.image && import.meta.env.VITE_PUBLIC_API_BASE_URL
     ? import.meta.env.VITE_PUBLIC_API_BASE_URL + "/" + user.avatar.image
     : undefined

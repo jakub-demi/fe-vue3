@@ -7,13 +7,17 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    ActionsMenu: typeof import('./src/components/dataTable/ActionsMenu.vue')['default']
     Avatar: typeof import('primevue/avatar')['default']
+    AvatarGroup: typeof import('primevue/avatargroup')['default']
     Button: typeof import('primevue/button')['default']
     Column: typeof import('primevue/column')['default']
+    DataGrid: typeof import('./src/components/dataTable/DataGrid.vue')['default']
     DataTable: typeof import('primevue/datatable')['default']
     FileInput: typeof import('./src/components/_common/form/FileInput.vue')['default']
     FileUpload: typeof import('primevue/fileupload')['default']
     ChangePasswordTab: typeof import('./src/components/pages/dashboard/profile/ProfileView/ChangePasswordTab.vue')['default']
+    IconSizeWrap: typeof import('./src/components/icons/IconSizeWrap.vue')['default']
     InlineMessage: typeof import('primevue/inlinemessage')['default']
     InputError: typeof import('./src/components/_common/form/InputError.vue')['default']
     InputField: typeof import('./src/components/_common/form/InputField.vue')['default']

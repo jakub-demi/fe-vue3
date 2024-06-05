@@ -63,5 +63,10 @@ const texts = {
       chooseLabel: "Select File",
     },
   },
+  toast: {
+    errors: {
+      access_denied: "Access Forbidden!",
+    },
+  },
 }
 export default texts

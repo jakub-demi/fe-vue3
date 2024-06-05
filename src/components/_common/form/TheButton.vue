@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { PropType } from "vue"
 import texts from "@/texts"
+import type { InteractEventT } from "@/types"
 
 const props = defineProps({
   text: {
@@ -51,13 +52,19 @@ const getText = (): string | undefined => {
       return props.text
   }
 }
+
+const clickHandler = (event: InteractEventT) => {
+  if (!props.handleClick) return
+
+  props.handleClick(event)
+}
 </script>
 
 <template>
   <Button
     :loading="loading"
     :type="getType()"
-    @click="handleClick ?? void 0"
+    @click="(event) => clickHandler(event)"
     :class="className"
   >
     <span

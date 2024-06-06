@@ -81,6 +81,18 @@ export type OrdersTableSlotPropsT = {
   data: OrderDataTableT
 }
 
+export type OrderDataT = {
+  due_date: Date | string
+  order_users: number[]
+  customer_name: string
+  customer_address: string
+  category_id?: number | null
+
+  status?: string | null
+  payment_date?: Date | string | null
+  created_at: Date | string
+}
+
 export type OrderDataCreateT = {
   due_date: Date | string
   order_users: number[]
@@ -101,6 +113,12 @@ export type OrderDataUpdateT = {
   status?: string
 }
 
+export type OrderDatesT = {
+  due_date: Date | string
+  payment_date?: Date | string | null
+  created_at: Date | string
+}
+
 export type OrderCategoryT = {
   id: number
   name: string
@@ -119,3 +137,20 @@ export type ActionsMenuPermissions = {
   edit: boolean
   delete: boolean
 }
+
+export type StrKeyStrValT = { [key: string]: string }
+
+export type StrKeyNumValT = { [key: string]: number }
+
+export type StrKeyNumStrValT = { [key: string]: number | string }
+
+export type SelectOptionT = StrKeyNumStrValT | { option: number | string; value: number | string }
+
+export type ErrorResponseDataT = {
+  errors: { [key: string]: string[] }
+  message: string
+}
+
+export type SelectOptionOrValueT = "option" | "value"
+
+export type RouteParamT = number | string

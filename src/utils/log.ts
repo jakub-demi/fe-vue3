@@ -1,4 +1,5 @@
-import { isRef } from "vue"
+import { isRef, watch } from "vue"
+import type { Ref } from "vue"
 
 const logColors = {
   red: "31",
@@ -33,6 +34,18 @@ const log = (data: any, message: string = "value", color?: logColor, devOnly: bo
   const _data = isRef(data) ? data.value : data
 
   console.log(`\x1b[${logColor}m%s\x1b[0m`, `------- <log> -------\n`, `${message}:`, _data)
+}
+
+export const watchLog = (
+  data: any,
+  message?: string,
+  color: logColor = "lightCyan",
+  devOnly: boolean = true
+) => {
+  const _data = isRef(data) ? data.value : data
+  watch(_data, () => {
+    log(_data, message, color, devOnly)
+  })
 }
 
 export default log

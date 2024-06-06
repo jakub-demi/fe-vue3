@@ -6,13 +6,13 @@ import { CheckIcon, XMarkIcon } from "@heroicons/vue/24/outline"
 import IconSizeWrap from "@/components/icons/IconSizeWrap.vue"
 import ActionsMenu from "@/components/dataTable/ActionsMenu.vue"
 import DataGrid from "@/components/dataTable/DataGrid.vue"
-import { getOrders } from "@/utils/services/orders"
+import { getOrdersForTable } from "@/utils/services/orderService"
 
 const ordersTable = ref<OrderDataTableT[]>([])
 const loading = ref<boolean>(true)
 
 onMounted(() => {
-  getOrders(ordersTable, loading)
+  getOrdersForTable(ordersTable, loading)
 })
 
 const excessiveUsers = (orderUsers: UserT[]): string => {

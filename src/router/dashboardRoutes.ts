@@ -2,7 +2,7 @@ import type { RouteRecordRaw } from "vue-router"
 import DashboardView from "@/views/dashboard/DashboardView.vue"
 import ProfileView from "@/views/dashboard/profile/ProfileView.vue"
 import OrdersIndex from "@/views/dashboard/orders/OrdersIndex.vue"
-import OrdersCreate from "@/views/dashboard/orders/OrdersCreate.vue"
+import OrdersCreate from "@/views/dashboard/orders/OrderCreate.vue"
 
 const dashboardRoutes: RouteRecordRaw[] = [
   {

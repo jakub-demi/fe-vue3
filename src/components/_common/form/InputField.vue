@@ -16,6 +16,11 @@ defineProps({
     required: false,
     default: "",
   },
+  disabled: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
 })
 const input = defineModel("input", { type: String, required: true })
 const error = defineModel("error", { type: Array<string>, required: false })
@@ -29,6 +34,7 @@ const clearError = () => error.value && (error.value = undefined)
       {{ labelText }}
     </label>
     <InputText
+      :disabled="disabled"
       v-model="input"
       :type="inputType"
       @keydown="clearError"

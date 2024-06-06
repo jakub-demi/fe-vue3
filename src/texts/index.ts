@@ -61,6 +61,7 @@ const texts = {
     save: "Save",
     update: "Update",
     create: "Create",
+    back: "Back",
   },
   form: {
     fileInput: {
@@ -70,6 +71,25 @@ const texts = {
   toast: {
     errors: {
       access_denied: "Access Forbidden!",
+    },
+  },
+  formWrap: {
+    loading: "Loading",
+  },
+  orders: {
+    form: {
+      labels: {
+        dueDate: "Due Date",
+        paymentDate: "Payment Date",
+        createdAt: "Created At",
+        customerName: "Customer Name",
+        customerAddress: "Customer Address",
+        orderUsers: "Order Users",
+        category: "Category",
+      },
+      placeholders: {
+        selectCategory: "Select a Category",
+      },
     },
   },
 }

@@ -1,4 +1,4 @@
-import type { SeverityT, UserT } from "@/types"
+import type { ErrorResponseDataT, SeverityT, UserT } from "@/types"
 import type { AxiosError, AxiosResponse } from "axios"
 import type { Ref } from "vue"
 import authStore from "@/stores/authStore"
@@ -26,6 +26,17 @@ export const setAccessDeniedToast = () => {
   setErrorToast(texts.toast.errors.access_denied)
 }
 
+export const setAxiosErrorToast = (error: AxiosError) => {
+  if (!error.response) {
+    log(error, "setAxiosErrorToast - non-response error value", "lightRed", true)
+    return
+  }
+
+  const errData = error.response.data as ErrorResponseDataT
+  const { message } = errData
+  setErrorToast(message)
+}
+
 export const handleResData = <T>(
   response: AxiosResponse,
   ref: Ref<T>,
@@ -37,10 +48,7 @@ export const handleResData = <T>(
 }
 
 export const handleInputErrors = <T>(error: AxiosError, ref: Ref<T>, showToast: boolean = true) => {
-  const errData = error.response?.data as {
-    errors: { [key: string]: string[] }
-    message: string
-  }
+  const errData = error.response?.data as ErrorResponseDataT
   const { errors } = errData
   const { message } = errData
 
@@ -124,4 +132,33 @@ export const buildFilesFormData = (data: object, ignoredFileKeys?: string[]): Fo
 
 export const getAppName = (): string => {
   return import.meta.env.VITE_PUBLIC_APP_NAME ?? "App"
+}
+
+export const tomorrowDate = (): Date => {
+  const today = new Date()
+  const tomorrow = new Date(today)
+  tomorrow.setDate(today.getDate() + 1)
+
+  return tomorrow
+}
+
+export const unset = <T extends { [key: string]: any }>(
+  obj: T,
+  key: keyof T | (keyof T)[]
+): void => {
+  if (Array.isArray(key)) {
+    key.forEach((key) => {
+      delete obj[key]
+    })
+  } else {
+    delete obj[key]
+  }
+}
+
+export const intParseWithCheck = (param: number | string): number | undefined => {
+  if (typeof param === "number") return param
+
+  const parsed = Number.parseInt(param)
+
+  return Number.isNaN(parsed) ? undefined : parsed
 }

@@ -32,7 +32,14 @@ const log = (data: any, message: string = "value", color?: logColor, devOnly: bo
 
   const _data = isRef(data) ? toRaw(data.value) : data
 
-  console.log(`\x1b[${logColor}m%s\x1b[0m`, `------- <log> -------\n`, `${message}:`, _data)
+  console.log(
+    `\x1b[${logColor}m%s\x1b[0m`,
+    "------- <log> -------\n",
+    "type:",
+    typeof data,
+    `\n${message}:`,
+    typeof _data === "string" ? `'${_data}'` : _data
+  )
 }
 
 export const watchLog = (

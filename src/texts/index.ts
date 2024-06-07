@@ -67,6 +67,14 @@ const texts = {
     fileInput: {
       chooseLabel: "Select File",
     },
+    dateTimePicker: {
+      placeholder: "Choose Date & Time",
+    },
+  },
+  table: {
+    headers: {
+      actions: "Actions",
+    },
   },
   toast: {
     errors: {
@@ -78,18 +86,36 @@ const texts = {
     loading: "Loading",
   },
   orders: {
+    table: {
+      headers: {
+        orderNumber: "Order Number",
+        dueDate: "Payment Due Date",
+        paymentDate: "Payment Date",
+        createdAt: "Created At",
+        currentStatus: "Status",
+        hasAccess: "Edit Access?",
+        orderUsers: "Order Users",
+      },
+      columns: {
+        currentStatus: {
+          noStatus: "No Status",
+        },
+      },
+    },
     form: {
       labels: {
-        dueDate: "Due Date",
+        dueDate: "Payment Due Date",
         paymentDate: "Payment Date",
         createdAt: "Created At",
         customerName: "Customer Name",
         customerAddress: "Customer Address",
         orderUsers: "Order Users",
         category: "Category",
+        status: "Order Status",
       },
       placeholders: {
         selectCategory: "Select a Category",
+        selectStatus: "Select a Status",
       },
     },
   },

@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import texts from "@/texts"
 import TheButton from "@/components/_common/form/TheButton.vue"
+import type { ButtonSubmitTypeT } from "@/types"
 
 type PropsT = {
   handleBackFn: Function
   handleSubmitFn: Function
-  btnType: "create" | "update"
+  btnType: ButtonSubmitTypeT
   classWrapper?: string
   submitHidden?: boolean
   submitLoading?: boolean

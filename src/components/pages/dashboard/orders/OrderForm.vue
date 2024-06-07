@@ -2,7 +2,6 @@
 import { onMounted, ref, watch } from "vue"
 import type {
   ButtonSubmitTypeT,
-  ButtonTypeT,
   OrderDataT,
   OrderDatesT,
   OrderErrorsT,
@@ -10,19 +9,19 @@ import type {
 } from "@/types"
 import InputField from "@/components/_common/form/InputField.vue"
 import authStore from "@/stores/authStore"
-import TheButton from "@/components/_common/form/TheButton.vue"
 import router from "@/router"
 import { createOrder, getOrderById, updateOrder } from "@/utils/services/orderService"
 import texts from "@/texts"
 import FormWrap from "@/components/_common/form/FormWrap.vue"
-import { tomorrowDate } from "@/utils"
+import { dateIfNotEmpty, tomorrowDate } from "@/utils"
 import DateTimePicker from "@/components/_common/form/DateTimePicker.vue"
 import TheSelect from "@/components/_common/form/TheSelect.vue"
 import log, { watchLog } from "@/utils/log"
 import { getUsersSelectOptions } from "@/utils/services/userService"
-import { getOrderCategoriesSelectOptions } from "@/utils/services/categoryService"
+import { getOrderCategoriesSelectOptions } from "@/utils/services/orderCategoryService"
 import TheMultiSelect from "@/components/_common/form/TheMultiSelect.vue"
 import FormButtons from "@/components/_common/form/FormButtons.vue"
+import { getOrderStatusesSelectOptions } from "@/utils/services/orderStatusService"
 
 type PropsT = {
   id?: number
@@ -43,14 +42,14 @@ const submitLoading = ref<boolean>(false)
 const formLoading = ref<boolean>(false)
 
 const originalDates = ref<OrderDatesT>({
-  due_date: new Date(),
-  payment_date: null,
+  due_date: tomorrow,
+  payment_date: new Date(),
   created_at: new Date(),
 })
-// const dueDate = ref<Date>(tomorrow)
 
 const usersToChooseFrom = ref<SelectOptionT[]>([])
 const categoriesToChooseFrom = ref<SelectOptionT[]>([])
+const statusesToChooseFrom = ref<SelectOptionT[]>([])
 
 const submitData = ref<OrderDataT>({
   category_id: undefined,
@@ -78,29 +77,23 @@ const handleSubmitClick = () => {
 
 const submitType = (): ButtonSubmitTypeT => (props.id ? "update" : "create")
 
-watchLog(submitData) //todo:dev remove
-
-watch(
-  () => props.id,
-  (orderId) => {
-    log("watch for props.id run") //todo:dev remove
-
-    if (!orderId) return
-
-    getOrderById(orderId, submitData, originalDates, formLoading)
+const unallowUnselectSelf = () => {
+  if (userId && !submitData.value.order_users.includes(userId) && !isUserAdmin) {
+    submitData.value.order_users.unshift(userId)
   }
-)
+}
 
 onMounted(() => {
-  log("OrderForm - onMounted run") //todo:dev remove
+  getUsersSelectOptions(usersToChooseFrom)
+  getOrderCategoriesSelectOptions(categoriesToChooseFrom)
+  getOrderStatusesSelectOptions(statusesToChooseFrom)
 
   if (props.id) {
     getOrderById(props.id, submitData, originalDates, formLoading)
   }
-
-  getUsersSelectOptions(usersToChooseFrom)
-  getOrderCategoriesSelectOptions(categoriesToChooseFrom)
 })
+
+watch(() => submitData.value.order_users, unallowUnselectSelf)
 </script>
 
 <template>
@@ -110,7 +103,26 @@ onMounted(() => {
       :label-text="texts.orders.form.labels.dueDate"
       v-model:model="submitData.due_date"
       v-model:error="errors.due_date"
+      :min-date="dateIfNotEmpty(originalDates.due_date)"
     />
+
+    <div v-if="id">
+      <DateTimePicker
+        :disabled="viewMode"
+        :label-text="texts.orders.form.labels.paymentDate"
+        v-model:model="submitData.payment_date"
+        v-model:error="errors.payment_date"
+        :min-date="dateIfNotEmpty(originalDates.payment_date)"
+      />
+
+      <DateTimePicker
+        :disabled="viewMode"
+        :label-text="texts.orders.form.labels.createdAt"
+        v-model:model="submitData.created_at"
+        v-model:error="errors.created_at"
+        :min-date="dateIfNotEmpty(submitData.created_at)"
+      />
+    </div>
 
     <TheMultiSelect
       :disabled="viewMode || !isUserAdmin"
@@ -144,19 +156,16 @@ onMounted(() => {
       v-model:error="errors.category_id"
     />
 
-    <!--    <div class="inline-flex">-->
-    <!--      <TheButton-->
-    <!--        :handle-click="goBack"-->
-    <!--        :text="texts.buttons.back"-->
-    <!--      />-->
-    <!--      <TheButton-->
-    <!--        :disabled="!!id && viewMode"-->
-    <!--        :loading="submitLoading"-->
-    <!--        :handle-click="handleSubmitClick"-->
-    <!--        :type="submitType()"-->
-    <!--        class-name="ml-1"-->
-    <!--      />-->
-    <!--    </div>-->
+    <TheSelect
+      v-if="id"
+      :disabled="viewMode"
+      :hide-clear="true"
+      :label-text="texts.orders.form.labels.status"
+      :placeholder="texts.orders.form.placeholders.selectStatus"
+      :options="statusesToChooseFrom"
+      v-model:model="submitData.status"
+      v-model:error="errors.status"
+    />
 
     <FormButtons
       :handle-back-fn="goBack"

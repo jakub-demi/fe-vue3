@@ -14,6 +14,8 @@ type PropsT = {
   classWrapper?: string
   classMultiSelect?: string
   disabled?: boolean
+  showToggleAll?: boolean
+  unselectableKeys?: (number | string)[]
 }
 
 withDefaults(defineProps<PropsT>(), {
@@ -23,6 +25,7 @@ withDefaults(defineProps<PropsT>(), {
   classWrapper: "",
   classMultiSelect: "",
   disabled: false,
+  showToggleAll: true,
 })
 
 const model = defineModel("model", { type: Array<number | string>, required: true })
@@ -46,6 +49,7 @@ const clearError = () => error.value && (error.value = undefined)
       :pt="pt"
       :class="classMultiSelect"
       :invalid="error && error.length > 0"
+      :show-toggle-all="showToggleAll"
       @change="clearError"
     />
     <InlineMessage

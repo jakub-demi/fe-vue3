@@ -3,6 +3,7 @@ import { ref, toRaw } from "vue"
 import doAxios from "@/utils/doAxios"
 import {
   formatDate,
+  handleResData,
   handleInputErrors,
   setAxiosErrorToast,
   setAxiosSuccessToast,
@@ -10,10 +11,11 @@ import {
 } from "@/utils"
 import type { OrderDataT, OrderDataTableT, OrderDatesT, OrderErrorsT, OrderT } from "@/types"
 import router from "@/router"
+import log from "@/utils/log"
 
 export const getOrders = async (orders: Ref<OrderT[]>) => {
   await doAxios("/orders", "get", true).then((res) => {
-    orders.value = res.data.data
+    handleResData(res, orders)
   })
 }
 
@@ -35,6 +37,7 @@ export const getOrdersForTable = (
         created_at: formatDate(order.created_at),
         has_access: order.has_access,
         order_users: order.order_users,
+        current_status: order.current_status,
       }))
     })
     .catch(setAxiosErrorToast)
@@ -49,7 +52,7 @@ export const getOrderById = (
 ) => {
   formLoading.value = true
 
-  const resData = ref<OrderT>({
+  let resData: OrderT = {
     category: undefined,
     created_at: new Date(),
     current_status: undefined,
@@ -61,29 +64,36 @@ export const getOrderById = (
     order_number: -1,
     order_users: [],
     payment_date: new Date(),
-  })
+  }
 
   doAxios(`/orders/${orderId}`, "get", true)
     .then((res) => {
-      resData.value = res.data.data
+      resData = res.data.data
 
       // formData
-      dataForForm.value.due_date = new Date(resData.value.due_date)
-      resData.value.payment_date &&
-        (dataForForm.value.payment_date = new Date(resData.value.payment_date))
-      dataForForm.value.created_at = new Date(resData.value.created_at)
-      dataForForm.value.customer_name = resData.value.customer_name
-      dataForForm.value.customer_address = resData.value.customer_address
+      dataForForm.value.due_date = new Date(resData.due_date)
+      resData.payment_date && (dataForForm.value.payment_date = new Date(resData.payment_date))
+      dataForForm.value.created_at = new Date(resData.created_at)
+      dataForForm.value.customer_name = resData.customer_name
+      dataForForm.value.customer_address = resData.customer_address
 
-      resData.value.order_users.forEach((user) => {
-        dataForForm.value.order_users.push(user.id) // formData selected users
+      // orderUsers
+      dataForForm.value.order_users = []
+      resData.order_users.forEach((user) => {
+        dataForForm.value.order_users.push(user.id)
       })
 
       // dates
       originalDates.value.due_date = toRaw(dataForForm.value).due_date
-      originalDates.value.payment_date &&
+      dataForForm.value.payment_date &&
         (originalDates.value.payment_date = toRaw(dataForForm.value).payment_date)
       originalDates.value.created_at = toRaw(dataForForm.value).created_at
+
+      // category
+      dataForForm.value.category_id = resData.category?.id
+
+      // status
+      dataForForm.value.status = resData.current_status?.value
     })
     .catch((err) => {
       router.push({ name: "orders" }).then(() => setAxiosErrorToast(err))

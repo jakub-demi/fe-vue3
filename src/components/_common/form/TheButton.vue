@@ -43,9 +43,7 @@ const getText = (): string | undefined => {
   }
 }
 
-const showIcon = (): boolean => {
-  return !props.loading && props.icon !== undefined
-}
+const showIcon = (): boolean => !props.loading && props.icon !== undefined
 
 const clickHandler = (event: InteractEventT) => {
   if (!props.handleClick) return

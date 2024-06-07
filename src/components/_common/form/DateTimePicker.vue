@@ -2,10 +2,12 @@
 import type { PropType } from "vue"
 import type { CalendarPassThroughOptions } from "primevue/calendar"
 import type { PVCalendarModelT } from "@/types/primevue"
+import texts from "@/texts"
 
 type PropsT = {
   minDate?: Date
   labelText?: string
+  placeholder?: string
   disabled?: boolean
   classWrapper?: string
   classLabel?: string
@@ -31,7 +33,7 @@ const clearError = () => error.value && (error.value = undefined)
     <Calendar
       :disabled="disabled"
       :min-date="minDate"
-      id="calendar-24h"
+      :placeholder="placeholder ?? texts.form.dateTimePicker.placeholder"
       v-model="model"
       showTime
       hourFormat="24"
@@ -39,7 +41,7 @@ const clearError = () => error.value && (error.value = undefined)
       :touch-u-i="true"
       :invalid="error && error.length > 0"
       :pt="pt"
-      :class="classPicker"
+      :class="['*:cursor-pointer', classPicker]"
       @change="clearError"
     />
     <InlineMessage

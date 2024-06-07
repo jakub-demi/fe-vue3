@@ -2,10 +2,11 @@ import doAxios from "@/utils/doAxios"
 import type { Ref } from "vue"
 import type { OrderCategoryT, SelectOptionT } from "@/types"
 import { ref } from "vue"
+import { handleResData } from "@/utils"
 
 export const getOrderCategories = async (orderCategories: Ref<OrderCategoryT[]>) => {
   await doAxios("/order-categories", "get", true).then((res) => {
-    orderCategories.value = res.data.data
+    handleResData(res, orderCategories)
   })
 }
 

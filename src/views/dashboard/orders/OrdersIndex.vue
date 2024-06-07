@@ -7,6 +7,7 @@ import IconSizeWrap from "@/components/icons/IconSizeWrap.vue"
 import ActionsMenu from "@/components/dataTable/ActionsMenu.vue"
 import DataGrid from "@/components/dataTable/DataGrid.vue"
 import { getOrdersForTable } from "@/utils/services/orderService"
+import texts from "@/texts"
 
 const ordersTable = ref<OrderDataTableT[]>([])
 const loading = ref<boolean>(true)
@@ -28,6 +29,13 @@ const showOrderItems = (id: number) => {
 const showOrderStatusHistory = (id: number) => {
   //todo:dev add order status history dialog window with order status histories
 }
+
+const noOrderStatus = {
+  value: texts.orders.table.columns.currentStatus.noStatus,
+  color: "#000",
+  name: texts.orders.table.columns.currentStatus.noStatus,
+  slug: texts.orders.table.columns.currentStatus.noStatus,
+}
 </script>
 
 <template>
@@ -40,26 +48,51 @@ const showOrderStatusHistory = (id: number) => {
       <Column
         :sortable="true"
         field="order_number"
-        header="Order Number"
+        :header="texts.orders.table.headers.orderNumber"
       />
       <Column
         :sortable="true"
         field="due_date"
-        header="Due Date"
+        :header="texts.orders.table.headers.dueDate"
       />
       <Column
         :sortable="true"
         field="payment_date"
-        header="Payment Date"
+        :header="texts.orders.table.headers.paymentDate"
       />
       <Column
         :sortable="true"
         field="created_at"
-        header="Created At"
+        :header="texts.orders.table.headers.createdAt"
       />
       <Column
+        :sortable="true"
+        sort-field="current_status.value"
+        field="current_status"
+        :header="texts.orders.table.headers.currentStatus"
+      >
+        <template #body="slotProps: OrdersTableSlotPropsT">
+          {{
+            (() => {
+              !slotProps.data.current_status && (slotProps.data.current_status = noOrderStatus)
+            })()
+          }}
+          <span
+            :style="`color: ${slotProps.data.current_status.color}`"
+            :class="
+              slotProps.data.current_status.name ===
+              texts.orders.table.columns.currentStatus.noStatus
+                ? 'italic'
+                : ''
+            "
+          >
+            {{ slotProps.data.current_status.value }}
+          </span>
+        </template>
+      </Column>
+      <Column
         field="has_access"
-        header="Edit Access?"
+        :header="texts.orders.table.headers.hasAccess"
       >
         <template #body="slotProps: OrdersTableSlotPropsT">
           <IconSizeWrap v-if="slotProps.data.has_access">
@@ -72,7 +105,7 @@ const showOrderStatusHistory = (id: number) => {
       </Column>
       <Column
         field="order_users"
-        header="Order Users"
+        :header="texts.orders.table.headers.orderUsers"
       >
         <template #body="slotProps: OrdersTableSlotPropsT">
           <AvatarGroup>
@@ -94,7 +127,7 @@ const showOrderStatusHistory = (id: number) => {
           </AvatarGroup>
         </template>
       </Column>
-      <Column header="Actions">
+      <Column :header="texts.table.headers.actions">
         <template #body="slotProps: OrdersTableSlotPropsT">
           <ActionsMenu
             :id="slotProps.data.id"

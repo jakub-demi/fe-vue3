@@ -41,14 +41,8 @@ export const setAxiosSuccessToast = (res: AxiosResponse) => {
   setToast(res.data.message)
 }
 
-export const handleResData = <T>(
-  response: AxiosResponse,
-  ref: Ref<T>,
-  showToast: boolean = false
-) => {
+export const handleResData = <T>(response: AxiosResponse, ref: Ref<T>) => {
   ref.value = response.data.data
-
-  showToast && setToast(response.data.message)
 }
 
 export const handleInputErrors = <T>(error: AxiosError, ref: Ref<T>, showToast: boolean = true) => {
@@ -180,4 +174,28 @@ export const intParseWithCheck = (param: number | string): number | undefined =>
   const parsed = Number.parseInt(param)
 
   return Number.isNaN(parsed) ? undefined : parsed
+}
+
+export const dateIfNotEmpty = (value: Date | string | null | undefined): Date | undefined => {
+  return value ? (value instanceof Date ? value : new Date(value)) : undefined
+}
+
+export const getKeyValObjectFromArray = <T>(
+  data: T[],
+  keyName: string = "id",
+  valueName: string = "name"
+) => {
+  return data.reduce((item: Record<number | string, any>, obj: T) => {
+    const key = obj[keyName as keyof T] as number | string
+
+    item[key] = obj[valueName as keyof T]
+    return item
+  }, {})
+}
+
+export const capitalizeFirstLetter = (str: string): string => {
+  if (str.length === 0) return str
+  const lowerCasedStr = str.toLowerCase()
+
+  return lowerCasedStr.charAt(0).toUpperCase() + lowerCasedStr.slice(1)
 }

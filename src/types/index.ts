@@ -73,6 +73,7 @@ export type OrderDataTableT = {
   due_date: Date | string
   payment_date: Date | string | null
   created_at: Date | string
+  current_status?: OrderStatusT
   has_access: boolean
   order_users: UserT[]
 }

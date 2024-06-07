@@ -1,36 +1,22 @@
 <script setup lang="ts">
-import type { PropType } from "vue"
 import texts from "@/texts"
-import type { InteractEventT } from "@/types"
+import type { ButtonTypeT, InteractEventT } from "@/types"
 
-const props = defineProps({
-  text: {
-    type: String,
-    required: false,
-  },
-  type: {
-    type: String as PropType<"save" | "create" | "update" | "submit" | "button">,
-    required: false,
-    default: "button",
-  },
-  handleClick: {
-    type: Function,
-    required: false,
-  },
-  className: {
-    type: String,
-    required: false,
-    default: "",
-  },
-  loading: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  icon: {
-    type: String,
-    required: false,
-  },
+type PropsT = {
+  text?: string
+  type?: ButtonTypeT
+  handleClick?: Function
+  className?: string
+  loading?: boolean
+  icon?: string
+  disabled?: boolean
+}
+
+const props = withDefaults(defineProps<PropsT>(), {
+  type: "button",
+  className: "",
+  loading: false,
+  disabled: false,
 })
 
 const getType = (): "submit" | "button" => {
@@ -70,6 +56,7 @@ const clickHandler = (event: InteractEventT) => {
 
 <template>
   <Button
+    :disabled="disabled"
     :loading="loading"
     :type="getType()"
     @click="(event) => clickHandler(event)"

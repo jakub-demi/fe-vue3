@@ -19,6 +19,7 @@ declare module 'vue' {
     Dropdown: typeof import('primevue/dropdown')['default']
     FileInput: typeof import('./src/components/_common/form/FileInput.vue')['default']
     FileUpload: typeof import('primevue/fileupload')['default']
+    FormButtons: typeof import('./src/components/_common/form/FormButtons.vue')['default']
     FormWrap: typeof import('./src/components/_common/form/FormWrap.vue')['default']
     ChangePasswordTab: typeof import('./src/components/pages/dashboard/profile/ProfileView/ChangePasswordTab.vue')['default']
     IconSizeWrap: typeof import('./src/components/icons/IconSizeWrap.vue')['default']
@@ -30,6 +31,7 @@ declare module 'vue' {
     Menu: typeof import('primevue/menu')['default']
     Message: typeof import('primevue/message')['default']
     MobileMenu: typeof import('./src/components/_layout/MobileMenu.vue')['default']
+    MultiSelect: typeof import('primevue/multiselect')['default']
     OrderForm: typeof import('./src/components/pages/dashboard/orders/OrderForm.vue')['default']
     PanelMenu: typeof import('primevue/panelmenu')['default']
     Password: typeof import('primevue/password')['default']
@@ -41,6 +43,7 @@ declare module 'vue' {
     TabPanel: typeof import('primevue/tabpanel')['default']
     TabView: typeof import('primevue/tabview')['default']
     TheButton: typeof import('./src/components/_common/form/TheButton.vue')['default']
+    TheMultiSelect: typeof import('./src/components/_common/form/TheMultiSelect.vue')['default']
     TheSelect: typeof import('./src/components/_common/form/TheSelect.vue')['default']
     UserProfileMenu: typeof import('./src/components/_layout/topbar/UserProfileMenu.vue')['default']
   }

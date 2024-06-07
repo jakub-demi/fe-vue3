@@ -93,6 +93,17 @@ export type OrderDataT = {
   created_at: Date | string
 }
 
+export type OrderErrorsT = {
+  due_date?: string[]
+  order_users?: string[]
+  customer_name?: string[]
+  customer_address?: string[]
+  category_id?: string[]
+  status?: string[]
+  payment_date?: string[]
+  created_at?: string[]
+}
+
 export type OrderDataCreateT = {
   due_date: Date | string
   order_users: number[]
@@ -144,7 +155,7 @@ export type StrKeyNumValT = { [key: string]: number }
 
 export type StrKeyNumStrValT = { [key: string]: number | string }
 
-export type SelectOptionT = StrKeyNumStrValT | { option: number | string; value: number | string }
+export type SelectOptionT = { option: number | string; value: number | string }
 
 export type ErrorResponseDataT = {
   errors: { [key: string]: string[] }
@@ -154,3 +165,16 @@ export type ErrorResponseDataT = {
 export type SelectOptionOrValueT = "option" | "value"
 
 export type RouteParamT = number | string
+
+export type ButtonTypeT = "save" | "create" | "update" | "submit" | "button"
+
+export type ButtonSubmitTypeT = "create" | "update"
+
+export type OptionalParamsOnlyT<T> = Partial<
+  Pick<
+    T,
+    {
+      [K in keyof T]-?: {} extends { [P in K]: T[K] } ? K : never
+    }[keyof T]
+  >
+>

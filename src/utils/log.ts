@@ -1,5 +1,4 @@
-import { isRef, watch } from "vue"
-import type { Ref } from "vue"
+import { isRef, toRaw, watch } from "vue"
 
 const logColors = {
   red: "31",
@@ -31,7 +30,7 @@ const log = (data: any, message: string = "value", color?: logColor, devOnly: bo
 
   const logColor = color ? logColors[color] : message.toLowerCase().includes("store") ? "93" : "32"
 
-  const _data = isRef(data) ? data.value : data
+  const _data = isRef(data) ? toRaw(data.value) : data
 
   console.log(`\x1b[${logColor}m%s\x1b[0m`, `------- <log> -------\n`, `${message}:`, _data)
 }
@@ -42,9 +41,9 @@ export const watchLog = (
   color: logColor = "lightCyan",
   devOnly: boolean = true
 ) => {
-  const _data = isRef(data) ? data.value : data
-  watch(_data, () => {
-    log(_data, message, color, devOnly)
+  const dataToWatch = isRef(data) ? data.value : data
+  watch(dataToWatch, () => {
+    log(data, message, color, devOnly)
   })
 }
 

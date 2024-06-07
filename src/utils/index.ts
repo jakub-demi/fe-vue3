@@ -23,7 +23,7 @@ export const setErrorToast = (message: string, life?: number, title?: string) =>
 }
 
 export const setAccessDeniedToast = () => {
-  setErrorToast(texts.toast.errors.access_denied)
+  setErrorToast(texts.toast.errors.accessDenied)
 }
 
 export const setAxiosErrorToast = (error: AxiosError) => {
@@ -35,6 +35,10 @@ export const setAxiosErrorToast = (error: AxiosError) => {
   const errData = error.response.data as ErrorResponseDataT
   const { message } = errData
   setErrorToast(message)
+}
+
+export const setAxiosSuccessToast = (res: AxiosResponse) => {
+  setToast(res.data.message)
 }
 
 export const handleResData = <T>(
@@ -49,6 +53,9 @@ export const handleResData = <T>(
 
 export const handleInputErrors = <T>(error: AxiosError, ref: Ref<T>, showToast: boolean = true) => {
   const errData = error.response?.data as ErrorResponseDataT
+
+  if (!error.response?.data) return
+
   const { errors } = errData
   const { message } = errData
 
@@ -153,6 +160,18 @@ export const unset = <T extends { [key: string]: any }>(
   } else {
     delete obj[key]
   }
+}
+
+export const unsetExcept = <T extends { [key: string]: any }>(
+  obj: T,
+  key: keyof T | (keyof T)[]
+): void => {
+  const keysToKeep = Array.isArray(key) ? key : [key]
+  Object.keys(obj).forEach((key) => {
+    if (!keysToKeep.includes(key as keyof T)) {
+      delete obj[key]
+    }
+  })
 }
 
 export const intParseWithCheck = (param: number | string): number | undefined => {

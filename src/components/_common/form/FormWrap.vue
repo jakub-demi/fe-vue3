@@ -26,7 +26,7 @@ watch(
 <template>
   <div
     v-if="!loading"
-    class="flex flex-col gap-1 lg:px-3"
+    class="flex flex-col gap-2 lg:px-36"
   >
     <slot />
   </div>

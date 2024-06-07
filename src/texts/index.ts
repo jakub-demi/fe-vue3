@@ -70,7 +70,8 @@ const texts = {
   },
   toast: {
     errors: {
-      access_denied: "Access Forbidden!",
+      accessDenied: "Access Forbidden!",
+      wrongRequest: "Wrong Request!",
     },
   },
   formWrap: {

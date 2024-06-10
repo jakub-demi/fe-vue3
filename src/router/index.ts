@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router"
 import LoginView from "@/views/login/LoginView.vue"
 import dashboardRoutes from "@/router/dashboardRoutes"
 import authStore from "@/stores/authStore"
+import pageLoaderStore from "@/stores/pageLoaderStore"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -49,7 +50,13 @@ const router = createRouter({
   ],
 })
 
+export const go = (route: string) => {
+  router.push({ name: route })
+}
+
 router.beforeEach(async (to, from) => {
+  pageLoaderStore().setLoading(true)
+
   to.meta.title &&
     (document.title =
       (to.meta.title as string) + " | " + (import.meta.env.VITE_PUBLIC_APP_NAME ?? "App"))
@@ -66,6 +73,8 @@ router.beforeEach(async (to, from) => {
   }
 })
 
-router.afterEach((to) => {})
+router.afterEach((to) => {
+  pageLoaderStore().setLoading(false)
+})
 
 export default router

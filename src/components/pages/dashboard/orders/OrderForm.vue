@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue"
+import { onMounted, ref } from "vue"
 import type {
   ButtonSubmitTypeT,
   OrderDataT,
@@ -13,10 +13,9 @@ import router from "@/router"
 import { createOrder, getOrderById, updateOrder } from "@/utils/services/orderService"
 import texts from "@/texts"
 import FormWrap from "@/components/_common/form/FormWrap.vue"
-import { dateIfNotEmpty, tomorrowDate } from "@/utils"
+import { dateIfNotEmpty, strLen, tomorrowDate } from "@/utils"
 import DateTimePicker from "@/components/_common/form/DateTimePicker.vue"
 import TheSelect from "@/components/_common/form/TheSelect.vue"
-import log, { watchLog } from "@/utils/log"
 import { getUsersSelectOptions } from "@/utils/services/userService"
 import { getOrderCategoriesSelectOptions } from "@/utils/services/orderCategoryService"
 import TheMultiSelect from "@/components/_common/form/TheMultiSelect.vue"
@@ -39,7 +38,7 @@ const isUserAdmin = auth.getUser?.is_admin
 const tomorrow = tomorrowDate()
 
 const submitLoading = ref<boolean>(false)
-const formLoading = ref<boolean>(false)
+const formLoading = ref<boolean>(true)
 
 const originalDates = ref<OrderDatesT>({
   due_date: tomorrow,
@@ -77,23 +76,17 @@ const handleSubmitClick = () => {
 
 const submitType = (): ButtonSubmitTypeT => (props.id ? "update" : "create")
 
-const unallowUnselectSelf = () => {
-  if (userId && !submitData.value.order_users.includes(userId) && !isUserAdmin) {
-    submitData.value.order_users.unshift(userId)
-  }
-}
-
-onMounted(() => {
-  getUsersSelectOptions(usersToChooseFrom)
-  getOrderCategoriesSelectOptions(categoriesToChooseFrom)
-  getOrderStatusesSelectOptions(statusesToChooseFrom)
+onMounted(async () => {
+  await getUsersSelectOptions(usersToChooseFrom)
+  await getOrderCategoriesSelectOptions(categoriesToChooseFrom)
+  await getOrderStatusesSelectOptions(statusesToChooseFrom)
 
   if (props.id) {
-    getOrderById(props.id, submitData, originalDates, formLoading)
+    await getOrderById(props.id, submitData, originalDates)
   }
-})
 
-watch(() => submitData.value.order_users, unallowUnselectSelf)
+  formLoading.value = false
+})
 </script>
 
 <template>
@@ -125,11 +118,12 @@ watch(() => submitData.value.order_users, unallowUnselectSelf)
     </div>
 
     <TheMultiSelect
-      :disabled="viewMode || !isUserAdmin"
+      :disabled="viewMode"
       :options="usersToChooseFrom"
       :label-text="texts.orders.form.labels.orderUsers"
       v-model:model="submitData.order_users"
       v-model:error="errors.order_users"
+      :keys-must-be-selected-if-model-empty="userId && !isUserAdmin ? [userId] : []"
     />
 
     <InputField
@@ -147,7 +141,8 @@ watch(() => submitData.value.order_users, unallowUnselectSelf)
     />
 
     <TheSelect
-      :disabled="viewMode || !isUserAdmin"
+      :disabled="viewMode || (!isUserAdmin && strLen(submitData.category_id) > 0)"
+      :hide-clear="!isUserAdmin && strLen(submitData.category_id) > 0"
       :label-text="texts.orders.form.labels.category"
       :placeholder="texts.orders.form.placeholders.selectCategory"
       :show-filter="categoriesToChooseFrom.length > 1"

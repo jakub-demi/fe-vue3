@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { SelectOptionOrValueT, SelectOptionT } from "@/types"
 import type { MultiSelectPassThroughOptions } from "primevue/multiselect"
+import { watch } from "vue"
 
 type PropsT = {
   options: SelectOptionT[]
@@ -15,10 +16,10 @@ type PropsT = {
   classMultiSelect?: string
   disabled?: boolean
   showToggleAll?: boolean
-  unselectableKeys?: (number | string)[]
+  keysMustBeSelectedIfModelEmpty?: (number | string)[]
 }
 
-withDefaults(defineProps<PropsT>(), {
+const props = withDefaults(defineProps<PropsT>(), {
   optionLabel: "option",
   optionValue: "value",
   showFilter: false,
@@ -26,12 +27,24 @@ withDefaults(defineProps<PropsT>(), {
   classMultiSelect: "",
   disabled: false,
   showToggleAll: true,
+  keysMustBeSelectedIfModelEmpty: () => [],
 })
 
 const model = defineModel("model", { type: Array<number | string>, required: true })
 const error = defineModel("error", { type: Array<string>, required: false })
 
 const clearError = () => error.value && (error.value = undefined)
+
+watch(
+  () => model.value,
+  () => {
+    props.keysMustBeSelectedIfModelEmpty.forEach((key) => {
+      if (!model.value.includes(key) && model.value.length < 1) {
+        model.value.unshift(key)
+      }
+    })
+  }
+)
 </script>
 
 <template>

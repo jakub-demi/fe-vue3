@@ -7,9 +7,9 @@ export const getUsers = async (users: Ref<UserT[]>) => {
   await doAxios("/users", "get", true).then((res) => (users.value = res.data.data))
 }
 
-export const getUsersSelectOptions = (usersOptions: Ref<SelectOptionT[]>) => {
+export const getUsersSelectOptions = async (usersOptions: Ref<SelectOptionT[]>) => {
   const users = ref<UserT[]>([])
-  getUsers(users).then(() => {
+  await getUsers(users).then(() => {
     users.value.forEach((user) => {
       usersOptions.value.push({
         option: user.fullName,

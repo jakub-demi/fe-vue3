@@ -199,3 +199,7 @@ export const capitalizeFirstLetter = (str: string): string => {
 
   return lowerCasedStr.charAt(0).toUpperCase() + lowerCasedStr.slice(1)
 }
+
+export const strLen = (value: number | string | null | undefined): number => {
+  return value ? value.toString().length : -1
+}

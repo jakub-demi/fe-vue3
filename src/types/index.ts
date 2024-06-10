@@ -179,3 +179,9 @@ export type OptionalParamsOnlyT<T> = Partial<
     }[keyof T]
   >
 >
+
+export type TextSizeT =
+  | `text-${"" | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}xl`
+  | "text-lg"
+  | "text-sm"
+  | "text-xs"

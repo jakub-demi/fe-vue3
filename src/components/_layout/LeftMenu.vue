@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import router from "@/router"
 import type { MenuItem } from "primevue/menuitem"
 import texts from "@/texts"
+import { go } from "@/router"
 
 const items: MenuItem[] = [
   {
     label: texts.leftMenu.dashboard,
     icon: "pi pi-home",
-    command: () => {
-      router.push({ name: "dashboard" })
-    },
+    command: () => go("dashboard"),
   },
   {
     label: texts.leftMenu.orders.index,
@@ -17,15 +15,11 @@ const items: MenuItem[] = [
     items: [
       {
         label: texts.leftMenu.orders.all,
-        command: () => {
-          router.push({ name: "orders" })
-        },
+        command: () => go("orders"),
       },
       {
         label: texts.leftMenu.orders.create,
-        command: () => {
-          router.push({ name: "orders.create" })
-        },
+        command: () => go("orders.create"),
       },
     ],
   },
@@ -38,6 +32,11 @@ const items: MenuItem[] = [
         command: () => {
           //
         },
+      },
+      {
+        label: "Test Page",
+        icon: "pi pi-list",
+        command: () => go("test"),
       },
     ],
   },

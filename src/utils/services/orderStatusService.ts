@@ -10,9 +10,9 @@ export const getOrderStatuses = async (orderStatuses: Ref<OrderStatusT[]>) => {
   })
 }
 
-export const getOrderStatusesSelectOptions = (orderStatusesOptions: Ref<SelectOptionT[]>) => {
+export const getOrderStatusesSelectOptions = async (orderStatusesOptions: Ref<SelectOptionT[]>) => {
   const orderStatuses = ref<OrderStatusT[]>([])
-  getOrderStatuses(orderStatuses).then(() => {
+  await getOrderStatuses(orderStatuses).then(() => {
     orderStatuses.value.forEach((orderStatus) => {
       orderStatusesOptions.value.push({
         option: orderStatus.value,

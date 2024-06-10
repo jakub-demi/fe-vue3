@@ -119,5 +119,16 @@ const texts = {
       },
     },
   },
+  dialog: {
+    buttons: {
+      confirm: "Confirm",
+      decline: "Decline",
+      ok: "OK",
+    },
+    headers: {
+      confirm: "Confirmation",
+      info: "Info",
+    },
+  },
 }
 export default texts

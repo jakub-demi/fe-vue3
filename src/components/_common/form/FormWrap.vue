@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, watch } from "vue"
+import { onMounted, ref, watch } from "vue"
 import texts from "@/texts"
+import PreLoader from "@/components/_common/PreLoader.vue"
 
 defineSlots()
 
@@ -13,24 +14,25 @@ const props = withDefaults(defineProps<PropsT>(), {
 })
 
 const loading = ref<boolean>(false)
-const loadingStr = texts.formWrap.loading
 
+onMounted(() => (loading.value = props.formLoading))
 watch(
   () => props.formLoading,
-  (newVal) => {
-    loading.value = newVal
-  }
+  () => (loading.value = props.formLoading)
 )
 </script>
 
 <template>
+  <div v-if="loading">
+    <PreLoader
+      :form-loader="true"
+      :text="texts.formWrap.loading"
+    />
+  </div>
   <div
-    v-if="!loading"
+    v-else
     class="flex flex-col gap-2 lg:px-36"
   >
     <slot />
-  </div>
-  <div v-else>
-    {{ loadingStr }}
   </div>
 </template>

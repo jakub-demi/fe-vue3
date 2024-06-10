@@ -19,13 +19,13 @@ export const getOrders = async (orders: Ref<OrderT[]>) => {
   })
 }
 
-export const getOrdersForTable = (
+export const getOrdersForTable = async (
   ordersTable: Ref<OrderDataTableT[]>,
   loadingRef: Ref<boolean>
 ) => {
   const orders = ref<OrderT[]>([])
 
-  doAxios("/orders", "get", true)
+  await doAxios("/orders", "get", true)
     .then((res) => {
       orders.value = res.data.data
 
@@ -44,14 +44,11 @@ export const getOrdersForTable = (
     .finally(() => (loadingRef.value = false))
 }
 
-export const getOrderById = (
+export const getOrderById = async (
   orderId: number,
   dataForForm: Ref<OrderDataT>,
-  originalDates: Ref<OrderDatesT>,
-  formLoading: Ref<boolean>
+  originalDates: Ref<OrderDatesT>
 ) => {
-  formLoading.value = true
-
   let resData: OrderT = {
     category: undefined,
     created_at: new Date(),
@@ -66,7 +63,7 @@ export const getOrderById = (
     payment_date: new Date(),
   }
 
-  doAxios(`/orders/${orderId}`, "get", true)
+  await doAxios(`/orders/${orderId}`, "get", true)
     .then((res) => {
       resData = res.data.data
 
@@ -98,10 +95,9 @@ export const getOrderById = (
     .catch((err) => {
       router.push({ name: "orders" }).then(() => setAxiosErrorToast(err))
     })
-    .finally(() => (formLoading.value = false))
 }
 
-export const createOrder = (
+export const createOrder = async (
   submitData: Ref<OrderDataT>,
   submitLoading: Ref<boolean>,
   errorsRef: Ref<OrderErrorsT>
@@ -112,7 +108,7 @@ export const createOrder = (
   dataToSend.due_date = formatDate(dataToSend.due_date)
   unset(dataToSend, ["status", "payment_date", "created_at"])
 
-  doAxios("/orders", "post", true, dataToSend)
+  await doAxios("/orders", "post", true, dataToSend)
     .then(setAxiosSuccessToast)
     .catch((err) => {
       handleInputErrors(err, errorsRef)
@@ -120,7 +116,7 @@ export const createOrder = (
     .finally(() => (submitLoading.value = false))
 }
 
-export const updateOrder = (
+export const updateOrder = async (
   orderId: number,
   submitData: Ref<OrderDataT>,
   submitLoading: Ref<boolean>,
@@ -133,7 +129,7 @@ export const updateOrder = (
   dataToSend.payment_date && (dataToSend.payment_date = formatDate(dataToSend.payment_date))
   dataToSend.created_at = formatDate(dataToSend.created_at)
 
-  doAxios(`/orders/${orderId}`, "put", true, dataToSend)
+  await doAxios(`/orders/${orderId}`, "put", true, dataToSend)
     .then(setAxiosSuccessToast)
     .catch((err) => {
       handleInputErrors(err, errorsRef)

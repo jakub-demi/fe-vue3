@@ -10,9 +10,11 @@ export const getOrderCategories = async (orderCategories: Ref<OrderCategoryT[]>)
   })
 }
 
-export const getOrderCategoriesSelectOptions = (orderCategoriesOptions: Ref<SelectOptionT[]>) => {
+export const getOrderCategoriesSelectOptions = async (
+  orderCategoriesOptions: Ref<SelectOptionT[]>
+) => {
   const orderCategories = ref<OrderCategoryT[]>([])
-  getOrderCategories(orderCategories).then(() => {
+  await getOrderCategories(orderCategories).then(() => {
     orderCategories.value.forEach((orderCategory) => {
       orderCategoriesOptions.value.push({
         option: orderCategory.name,

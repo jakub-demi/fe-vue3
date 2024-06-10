@@ -10,6 +10,7 @@ type PropsT = {
   loading?: boolean
   icon?: string
   disabled?: boolean
+  autofocus?: boolean
 }
 
 const props = withDefaults(defineProps<PropsT>(), {
@@ -17,6 +18,7 @@ const props = withDefaults(defineProps<PropsT>(), {
   className: "",
   loading: false,
   disabled: false,
+  autofocus: false,
 })
 
 const getType = (): "submit" | "button" => {
@@ -59,6 +61,7 @@ const clickHandler = (event: InteractEventT) => {
     :type="getType()"
     @click="(event) => clickHandler(event)"
     :class="className"
+    :autofocus="autofocus"
   >
     <span
       v-if="loading"

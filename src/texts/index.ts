@@ -101,6 +101,10 @@ const texts = {
           noStatus: "No Status",
         },
       },
+      additionalActions: {
+        orderItems: "Order Items",
+        statusHistory: "Status History",
+      },
     },
     form: {
       labels: {
@@ -128,6 +132,11 @@ const texts = {
     headers: {
       confirm: "Confirmation",
       info: "Info",
+    },
+  },
+  actionsMenu: {
+    removal: {
+      confirmationText: "Are you sure you want to remove this item?",
     },
   },
 }

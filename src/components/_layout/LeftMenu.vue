@@ -33,11 +33,11 @@ const items: MenuItem[] = [
           //
         },
       },
-      {
-        label: "Test Page",
-        icon: "pi pi-list",
-        command: () => go("test"),
-      },
+      // {
+      //   label: "Test Page",
+      //   icon: "pi pi-list",
+      //   command: () => go("test"),
+      // },
     ],
   },
 ]

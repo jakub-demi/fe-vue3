@@ -37,13 +37,16 @@ const handleDecline = () => {
         v-if="store.current.confirmFn"
         :text="store.current.confirmBtnText ?? texts.dialog.buttons.confirm"
         :handle-click="handleConfirm"
+        icon="pi pi-check"
       />
       <TheButton
+        :autofocus="true"
         :text="
           store.current.declineBtnText ??
           (store.current.confirmFn ? texts.dialog.buttons.decline : texts.dialog.buttons.ok)
         "
         :handle-click="handleDecline"
+        icon="pi pi-times"
       />
     </div>
   </Dialog>

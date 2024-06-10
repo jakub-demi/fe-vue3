@@ -144,7 +144,7 @@ export type OrderStatusT = {
   slug: string
 }
 
-export type ActionsMenuPermissions = {
+export type ActionsMenuPermissionsT = {
   view: boolean
   edit: boolean
   delete: boolean

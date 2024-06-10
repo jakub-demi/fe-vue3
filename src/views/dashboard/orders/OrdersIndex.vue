@@ -12,9 +12,13 @@ import texts from "@/texts"
 const ordersTable = ref<OrderDataTableT[]>([])
 const loading = ref<boolean>(true)
 
-onMounted(() => {
-  getOrdersForTable(ordersTable, loading)
-})
+const handleDataLoad = async () => {
+  loading.value = true
+  await getOrdersForTable(ordersTable)
+  loading.value = false
+}
+
+onMounted(handleDataLoad)
 
 const excessiveUsers = (orderUsers: UserT[]): string => {
   const usersWhichAreLeft = orderUsers.length - 3
@@ -132,14 +136,15 @@ const noOrderStatus = {
           <ActionsMenu
             :id="slotProps.data.id"
             route="orders"
+            :handle-reload-async-fn="handleDataLoad"
             :additional-actions="[
               {
-                label: 'Order Items',
+                label: texts.orders.table.additionalActions.orderItems,
                 icon: 'pi pi-shopping-bag',
                 command: () => showOrderItems(slotProps.data.id),
               },
               {
-                label: 'Status History',
+                label: texts.orders.table.additionalActions.statusHistory,
                 icon: 'pi pi-history',
                 command: () => showOrderStatusHistory(slotProps.data.id),
               },

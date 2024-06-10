@@ -19,10 +19,7 @@ export const getOrders = async (orders: Ref<OrderT[]>) => {
   })
 }
 
-export const getOrdersForTable = async (
-  ordersTable: Ref<OrderDataTableT[]>,
-  loadingRef: Ref<boolean>
-) => {
+export const getOrdersForTable = async (ordersTable: Ref<OrderDataTableT[]>) => {
   const orders = ref<OrderT[]>([])
 
   await doAxios("/orders", "get", true)
@@ -41,7 +38,6 @@ export const getOrdersForTable = async (
       }))
     })
     .catch(setAxiosErrorToast)
-    .finally(() => (loadingRef.value = false))
 }
 
 export const getOrderById = async (

@@ -1,17 +1,23 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
 import type { MenuItem } from "primevue/menuitem"
-import type { ActionsMenuPermissions, InteractEventT } from "@/types"
+import type { ActionsMenuPermissionsT, InteractEventT } from "@/types"
 import router from "@/router"
 import TheButton from "@/components/_common/form/TheButton.vue"
-import { setAccessDeniedToast } from "@/utils"
+import { setAccessDeniedToast, setAxiosErrorToast, setAxiosSuccessToast } from "@/utils"
+import doAxios from "@/utils/doAxios"
+import dialogStore from "@/stores/dialogStore"
+import texts from "@/texts"
+
+const dialog = dialogStore()
 
 type PropsT = {
   id: number
   route: string
+  handleReloadAsyncFn: () => Promise<void>
   additionalActionsTitle?: string
   additionalActions?: MenuItem[]
-  permissions?: ActionsMenuPermissions
+  permissions?: ActionsMenuPermissionsT
 }
 
 const props = defineProps<PropsT>()
@@ -22,8 +28,17 @@ const toggle = (event: InteractEventT) => {
   actionsMenu.value.toggle(event)
 }
 
-const doRemoval = () => {
-  //todo:dev removal api call handler
+const confirmRemoval = () => {
+  dialog.showDialog(texts.actionsMenu.removal.confirmationText, () => doRemoval())
+}
+
+const doRemoval = async () => {
+  await doAxios(`/${props.route}/${props.id}`, "delete", true)
+    .then(async (res) => {
+      setAxiosSuccessToast(res)
+      await props.handleReloadAsyncFn()
+    })
+    .catch(setAxiosErrorToast)
 }
 
 const actions: MenuItem[] = [
@@ -60,7 +75,7 @@ const actions: MenuItem[] = [
             setAccessDeniedToast()
             return
           }
-          doRemoval()
+          confirmRemoval()
         },
       },
     ],

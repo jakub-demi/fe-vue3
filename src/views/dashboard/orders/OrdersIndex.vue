@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
 import { getAvatarForUser, getInitialsForUser } from "@/utils"
-import type { OrderDataTableT, OrdersTableSlotPropsT, UserT } from "@/types"
+import type { OrderDataTableT, OrdersTableSlotPropsT, OrderStatusT, UserT } from "@/types"
 import { CheckIcon, XMarkIcon } from "@heroicons/vue/24/outline"
 import IconSizeWrap from "@/components/icons/IconSizeWrap.vue"
 import ActionsMenu from "@/components/dataTable/ActionsMenu.vue"
@@ -34,7 +34,7 @@ const showOrderStatusHistory = (id: number) => {
   //todo:dev add order status history dialog window with order status histories
 }
 
-const noOrderStatus = {
+const noOrderStatus: OrderStatusT = {
   value: texts.orders.table.columns.currentStatus.noStatus,
   color: "#000",
   name: texts.orders.table.columns.currentStatus.noStatus,

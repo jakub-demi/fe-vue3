@@ -18,6 +18,7 @@ type PropsT = {
   additionalActionsTitle?: string
   additionalActions?: MenuItem[]
   permissions?: ActionsMenuPermissionsT
+  extAxiosDeletePath?: string
 }
 
 const props = defineProps<PropsT>()
@@ -33,7 +34,7 @@ const confirmRemoval = () => {
 }
 
 const doRemoval = async () => {
-  await doAxios(`/${props.route}/${props.id}`, "delete", true)
+  await doAxios(props.extAxiosDeletePath ?? `/${props.route}/${props.id}`, "delete", true)
     .then(async (res) => {
       setAxiosSuccessToast(res)
       await props.handleReloadAsyncFn()

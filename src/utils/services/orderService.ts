@@ -14,9 +14,11 @@ import router from "@/router"
 import log from "@/utils/log"
 
 export const getOrders = async (orders: Ref<OrderT[]>) => {
-  await doAxios("/orders", "get", true).then((res) => {
-    handleResData(res, orders)
-  })
+  await doAxios("/orders", "get", true)
+    .then((res) => {
+      handleResData(res, orders)
+    })
+    .catch(setAxiosErrorToast)
 }
 
 export const getOrdersForTable = async (ordersTable: Ref<OrderDataTableT[]>) => {

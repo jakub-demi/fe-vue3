@@ -1,10 +1,14 @@
-import type { ErrorResponseDataT, SeverityT, UserT } from "@/types"
-import type { AxiosError, AxiosResponse } from "axios"
+import type { ErrorResponseDataT, SeverityT, UserT, ButtonSubmitTypeT } from "@/types"
+import type { AxiosError as AxiosErrorT, AxiosResponse } from "axios"
+import { AxiosError } from "axios"
 import type { Ref } from "vue"
 import authStore from "@/stores/authStore"
 import log from "@/utils/log"
 import toastServiceStore from "@/stores/toastServiceStore"
 import texts from "@/texts"
+import router from "@/router"
+import type { RouteParamsRaw } from "vue-router"
+import { HttpStatusE } from "@/types/enums"
 
 export const setToast = (message: string, severity?: SeverityT, title?: string, life?: number) => {
   const toast = toastServiceStore().toast
@@ -168,10 +172,12 @@ export const unsetExcept = <T extends { [key: string]: any }>(
   })
 }
 
-export const intParseWithCheck = (param: number | string): number | undefined => {
+export const intParseWithCheck = (
+  param: number | string | null | undefined
+): number | undefined => {
   if (typeof param === "number") return param
 
-  const parsed = Number.parseInt(param)
+  const parsed = Number.parseInt(`${param}`)
 
   return Number.isNaN(parsed) ? undefined : parsed
 }
@@ -202,4 +208,33 @@ export const capitalizeFirstLetter = (str: string): string => {
 
 export const strLen = (value: number | string | null | undefined): number => {
   return value ? value.toString().length : -1
+}
+
+export const getSubmitBtnType = (id?: number): ButtonSubmitTypeT => (id ? "update" : "create")
+
+export const accessDeniedRedirect = (route: string, routeParams?: RouteParamsRaw) => {
+  router.replace({ name: route, params: routeParams })
+  setAccessDeniedToast()
+}
+
+export const handleAccessDenied = (
+  errorOrResponse: AxiosErrorT | AxiosResponse,
+  route: string,
+  routeParams?: RouteParamsRaw
+) => {
+  const isError = errorOrResponse instanceof AxiosError
+
+  if (isError && errorOrResponse.response?.status === HttpStatusE.FORBIDDEN) {
+    router.replace({ name: route, params: routeParams })
+    const errData = errorOrResponse.response.data as { message: string }
+    setErrorToast(errData.message)
+  } else if (!isError) {
+    const hasAccess: boolean | null = errorOrResponse.data.data?.has_access
+      ? errorOrResponse.data.data.has_access
+      : null
+
+    if (hasAccess) return
+
+    accessDeniedRedirect(route, routeParams)
+  }
 }

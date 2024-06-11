@@ -122,6 +122,18 @@ const texts = {
         selectStatus: "Select a Status",
       },
     },
+
+    orderItems: {
+      table: {
+        headers: {
+          name: "Item Name",
+          count: "Count",
+          cost: "Cost",
+          vat: "VAT",
+          costWithVat: "Cost with VAT",
+        },
+      },
+    },
   },
   dialog: {
     buttons: {

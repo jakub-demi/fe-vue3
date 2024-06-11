@@ -8,6 +8,7 @@ import ActionsMenu from "@/components/dataTable/ActionsMenu.vue"
 import DataGrid from "@/components/dataTable/DataGrid.vue"
 import { getOrdersForTable } from "@/utils/services/orderService"
 import texts from "@/texts"
+import router from "@/router"
 
 const ordersTable = ref<OrderDataTableT[]>([])
 const loading = ref<boolean>(true)
@@ -28,6 +29,7 @@ const excessiveUsers = (orderUsers: UserT[]): string => {
 
 const showOrderItems = (id: number) => {
   //todo:dev add order items - router.push({name: 'order-items', params: { id: /*slotProps.data.*/id }})
+  router.push({ name: "order-items", params: { orderId: id } })
 }
 
 const showOrderStatusHistory = (id: number) => {

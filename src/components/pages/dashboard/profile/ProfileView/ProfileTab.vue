@@ -8,6 +8,7 @@ import type { UpdateProfileFormT, UserErrorT } from "@/types"
 import TheButton from "@/components/_common/form/TheButton.vue"
 import FileInput from "@/components/_common/form/FileInput.vue"
 import InputField from "@/components/_common/form/InputField.vue"
+import log from "@/utils/log"
 
 const auth = authStore()
 
@@ -31,7 +32,7 @@ const save = () => {
 
   loading.value = true
 
-  doAxios("/user/update-profile", "post", true, buildFilesFormData(userData.value))
+  doAxios("/user/update-profile", "post", true, buildFilesFormData(userData.value, ["avatar"]))
     .then((res) => {
       setToast(res.data.message)
       auth.setUser(res.data.data)

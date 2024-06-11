@@ -10,6 +10,8 @@ import router from "./router"
 import ToastService from "primevue/toastservice"
 import Toast from "primevue/toast"
 
+import Tooltip from "primevue/tooltip"
+
 import aura from "@/preset/aura-ts"
 
 const app = createApp(App)
@@ -21,6 +23,8 @@ app.use(PrimeVue, {
 app.use(createPinia())
 app.use(router)
 app.use(ToastService)
+
+app.directive("tooltip", Tooltip)
 
 app.component("PrimeToast", Toast)
 

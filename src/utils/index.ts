@@ -1,9 +1,10 @@
-import type { SeverityT } from "@/types"
+import type { ErrorResponseDataT, SeverityT, UserT } from "@/types"
 import type { AxiosError, AxiosResponse } from "axios"
 import type { Ref } from "vue"
 import authStore from "@/stores/authStore"
 import log from "@/utils/log"
 import toastServiceStore from "@/stores/toastServiceStore"
+import texts from "@/texts"
 
 export const setToast = (message: string, severity?: SeverityT, title?: string, life?: number) => {
   const toast = toastServiceStore().toast
@@ -17,21 +18,38 @@ export const setToast = (message: string, severity?: SeverityT, title?: string, 
   })
 }
 
-export const handleResData = <T>(
-  response: AxiosResponse,
-  ref: Ref<T>,
-  showToast: boolean = false
-) => {
-  ref.value = response.data.data
+export const setErrorToast = (message: string, life?: number, title?: string) => {
+  setToast(message, "error", title, life)
+}
 
-  showToast && setToast(response.data.message)
+export const setAccessDeniedToast = () => {
+  setErrorToast(texts.toast.errors.accessDenied)
+}
+
+export const setAxiosErrorToast = (error: AxiosError) => {
+  if (!error.response) {
+    log(error, "setAxiosErrorToast - non-response error value", "lightRed", true)
+    return
+  }
+
+  const errData = error.response.data as ErrorResponseDataT
+  const { message } = errData
+  setErrorToast(message)
+}
+
+export const setAxiosSuccessToast = (res: AxiosResponse) => {
+  setToast(res.data.message)
+}
+
+export const handleResData = <T>(response: AxiosResponse, ref: Ref<T>) => {
+  ref.value = response.data.data
 }
 
 export const handleInputErrors = <T>(error: AxiosError, ref: Ref<T>, showToast: boolean = true) => {
-  const errData = error.response?.data as {
-    errors: { [key: string]: string[] }
-    message: string
-  }
+  const errData = error.response?.data as ErrorResponseDataT
+
+  if (!error.response?.data) return
+
   const { errors } = errData
   const { message } = errData
 
@@ -66,9 +84,14 @@ export const formatDate = (datetime: Date | string): string => {
 }
 
 export const getUserInitials = (): string => {
-  const fullName = authStore().getUser?.fullName
-  if (!fullName) return ""
-  const parts = fullName.split(" ")
+  const user = authStore().getUser
+  if (!user) return ""
+
+  return getInitialsForUser(user)
+}
+
+export const getInitialsForUser = (user: UserT): string => {
+  const parts = user.fullName.split(" ")
   const initials = parts.map((part) => {
     return part.substring(0, 1).toUpperCase()
   })
@@ -78,6 +101,10 @@ export const getUserInitials = (): string => {
 export const getUserAvatar = () => {
   const user = authStore().getUser
 
+  return getAvatarForUser(user)
+}
+
+export const getAvatarForUser = (user: UserT | null) => {
   return user?.avatar?.image && import.meta.env.VITE_PUBLIC_API_BASE_URL
     ? import.meta.env.VITE_PUBLIC_API_BASE_URL + "/" + user.avatar.image
     : undefined
@@ -106,4 +133,73 @@ export const buildFilesFormData = (data: object, ignoredFileKeys?: string[]): Fo
 
 export const getAppName = (): string => {
   return import.meta.env.VITE_PUBLIC_APP_NAME ?? "App"
+}
+
+export const tomorrowDate = (): Date => {
+  const today = new Date()
+  const tomorrow = new Date(today)
+  tomorrow.setDate(today.getDate() + 1)
+
+  return tomorrow
+}
+
+export const unset = <T extends { [key: string]: any }>(
+  obj: T,
+  key: keyof T | (keyof T)[]
+): void => {
+  if (Array.isArray(key)) {
+    key.forEach((key) => {
+      delete obj[key]
+    })
+  } else {
+    delete obj[key]
+  }
+}
+
+export const unsetExcept = <T extends { [key: string]: any }>(
+  obj: T,
+  key: keyof T | (keyof T)[]
+): void => {
+  const keysToKeep = Array.isArray(key) ? key : [key]
+  Object.keys(obj).forEach((key) => {
+    if (!keysToKeep.includes(key as keyof T)) {
+      delete obj[key]
+    }
+  })
+}
+
+export const intParseWithCheck = (param: number | string): number | undefined => {
+  if (typeof param === "number") return param
+
+  const parsed = Number.parseInt(param)
+
+  return Number.isNaN(parsed) ? undefined : parsed
+}
+
+export const dateIfNotEmpty = (value: Date | string | null | undefined): Date | undefined => {
+  return value ? (value instanceof Date ? value : new Date(value)) : undefined
+}
+
+export const getKeyValObjectFromArray = <T>(
+  data: T[],
+  keyName: string = "id",
+  valueName: string = "name"
+) => {
+  return data.reduce((item: Record<number | string, any>, obj: T) => {
+    const key = obj[keyName as keyof T] as number | string
+
+    item[key] = obj[valueName as keyof T]
+    return item
+  }, {})
+}
+
+export const capitalizeFirstLetter = (str: string): string => {
+  if (str.length === 0) return str
+  const lowerCasedStr = str.toLowerCase()
+
+  return lowerCasedStr.charAt(0).toUpperCase() + lowerCasedStr.slice(1)
+}
+
+export const strLen = (value: number | string | null | undefined): number => {
+  return value ? value.toString().length : -1
 }

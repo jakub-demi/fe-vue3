@@ -1,31 +1,24 @@
 <script setup lang="ts">
-import type { PropType } from "vue"
 import texts from "@/texts"
+import type { ButtonTypeT, InteractEventT } from "@/types"
 
-const props = defineProps({
-  text: {
-    type: String,
-    required: false,
-  },
-  type: {
-    type: String as PropType<"save" | "create" | "update" | "submit" | "button">,
-    required: false,
-    default: "button",
-  },
-  handleClick: {
-    type: Function,
-    required: false,
-  },
-  className: {
-    type: String,
-    required: false,
-    default: "",
-  },
-  loading: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
+type PropsT = {
+  text?: string
+  type?: ButtonTypeT
+  handleClick?: Function
+  className?: string
+  loading?: boolean
+  icon?: string
+  disabled?: boolean
+  autofocus?: boolean
+}
+
+const props = withDefaults(defineProps<PropsT>(), {
+  type: "button",
+  className: "",
+  loading: false,
+  disabled: false,
+  autofocus: false,
 })
 
 const getType = (): "submit" | "button" => {
@@ -51,18 +44,32 @@ const getText = (): string | undefined => {
       return props.text
   }
 }
+
+const showIcon = (): boolean => !props.loading && props.icon !== undefined
+
+const clickHandler = (event: InteractEventT) => {
+  if (!props.handleClick) return
+
+  props.handleClick(event)
+}
 </script>
 
 <template>
   <Button
+    :disabled="disabled"
     :loading="loading"
     :type="getType()"
-    @click="handleClick ?? void 0"
+    @click="(event) => clickHandler(event)"
     :class="className"
+    :autofocus="autofocus"
   >
     <span
       v-if="loading"
       class="pi pi-spin pi-spinner mr-1"
+    />
+    <span
+      v-if="showIcon()"
+      :class="[icon, 'mr-1']"
     />
     {{ text ?? getText() ?? "" }}
   </Button>

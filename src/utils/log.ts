@@ -1,3 +1,5 @@
+import { isRef, toRaw, watch } from "vue"
+
 const logColors = {
   red: "31",
   green: "32",
@@ -28,7 +30,28 @@ const log = (data: any, message: string = "value", color?: logColor, devOnly: bo
 
   const logColor = color ? logColors[color] : message.toLowerCase().includes("store") ? "93" : "32"
 
-  console.log(`\x1b[${logColor}m%s\x1b[0m`, `------- <log> -------\n`, `${message}:`, data)
+  const _data = isRef(data) ? toRaw(data.value) : data
+
+  console.log(
+    `\x1b[${logColor}m%s\x1b[0m`,
+    "------- <log> -------\n",
+    "type:",
+    typeof data,
+    `\n${message}:`,
+    typeof _data === "string" ? `'${_data}'` : _data
+  )
+}
+
+export const watchLog = (
+  data: any,
+  message?: string,
+  color: logColor = "lightCyan",
+  devOnly: boolean = true
+) => {
+  const dataToWatch = isRef(data) ? data.value : data
+  watch(dataToWatch, () => {
+    log(data, message, color, devOnly)
+  })
 }
 
 export default log

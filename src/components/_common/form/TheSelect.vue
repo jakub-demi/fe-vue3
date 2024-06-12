@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import type { SelectOptionT, SelectOptionOrValueT, StrKeyNumStrValT } from "@/types"
+import InputError from "@/components/_common/form/InputError.vue"
+import type { DropdownChangeEvent } from "primevue/dropdown"
 
 type PropsT = {
   options: SelectOptionT[]
@@ -10,6 +12,7 @@ type PropsT = {
   labelText?: string
   disabled?: boolean
   hideClear?: boolean
+  handleChange?: (event: DropdownChangeEvent) => void
 }
 
 const props = withDefaults(defineProps<PropsT>(), {
@@ -18,9 +21,11 @@ const props = withDefaults(defineProps<PropsT>(), {
   showFilter: false,
   disabled: false,
   hideClear: false,
+  handleChange: (event: DropdownChangeEvent) => void 0,
 })
 
 const model = defineModel("model", { required: true })
+const error = defineModel("error", { type: Array<string>, required: false })
 
 const textToDisplay = (value: number | string) => {
   const found = props.options.filter(
@@ -28,12 +33,18 @@ const textToDisplay = (value: number | string) => {
   )
   return (found[0] as StrKeyNumStrValT)[props.optionLabel]
 }
+
+const onSelectChange = (event: DropdownChangeEvent) => {
+  error.value = undefined
+  props.handleChange(event)
+}
 </script>
 
 <template>
   <div class="flex flex-col gap-1">
     <label v-if="labelText">{{ labelText }}</label>
     <Dropdown
+      v-if="options.length > 0"
       :disabled="disabled"
       v-model="model"
       :options="options"
@@ -42,11 +53,13 @@ const textToDisplay = (value: number | string) => {
       :option-value="optionValue"
       :placeholder="placeholder"
       :show-clear="!hideClear"
+      :invalid="error && error.length > 0"
+      @change="onSelectChange"
       class="min-h-10"
     >
       <template #value="slotProps">
         <div
-          v-if="slotProps.value"
+          v-if="slotProps.value !== undefined"
           class="flex align-items-center"
         >
           <div>{{ textToDisplay(slotProps.value) }}</div>
@@ -62,5 +75,6 @@ const textToDisplay = (value: number | string) => {
         </div>
       </template>
     </Dropdown>
+    <InputError v-model:error="error" />
   </div>
 </template>

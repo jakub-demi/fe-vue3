@@ -133,6 +133,15 @@ const texts = {
           costWithVat: "Cost with VAT",
         },
       },
+      form: {
+        labels: {
+          name: "Item Name",
+          count: "Count",
+          cost: "Cost",
+          vat: "VAT",
+          costWithVat: "Cost with VAT",
+        },
+      },
     },
   },
   dialog: {

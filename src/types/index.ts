@@ -136,10 +136,16 @@ export type OrderItemsTableSlotPropsT = {
 
 export type OrderItemDataT = {
   name: string
-  count?: number
+  count: number
   cost?: number
   vat: number
-  // cost_with_vat?: number
+}
+
+export type OrderItemErrorsT = {
+  name?: string[]
+  count?: string[]
+  cost?: string[]
+  vat?: string[]
 }
 
 export type OrderCategoryT = {

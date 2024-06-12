@@ -2,9 +2,12 @@
 import texts from "@/texts"
 import TheButton from "@/components/_common/form/TheButton.vue"
 import type { ButtonSubmitTypeT } from "@/types"
+import router from "@/router"
+import type { RouteParamsRaw, RouteRecordName } from "vue-router"
 
 type PropsT = {
-  handleBackFn: Function
+  backBtnRoute: RouteRecordName
+  backBtnRouteParams?: RouteParamsRaw
   handleSubmitFn: Function
   btnType: ButtonSubmitTypeT
   classWrapper?: string
@@ -12,17 +15,21 @@ type PropsT = {
   submitLoading?: boolean
 }
 
-withDefaults(defineProps<PropsT>(), {
+const props = withDefaults(defineProps<PropsT>(), {
   classWrapper: "",
   submitHidden: false,
   submitLoading: false,
 })
+
+const goBack = () => {
+  router.push({ name: props.backBtnRoute, params: props.backBtnRouteParams })
+}
 </script>
 
 <template>
   <div :class="['inline-flex', classWrapper]">
     <TheButton
-      :handle-click="handleBackFn"
+      :handle-click="goBack"
       :text="texts.buttons.back"
     />
     <TheButton

@@ -1,21 +1,12 @@
 <script setup lang="ts">
-defineProps({
-  error: {
-    type: String,
-    required: false,
-  },
-  className: {
-    type: String,
-    required: false,
-  },
-})
+const error = defineModel("error", { type: Array<string>, required: false })
 </script>
 
 <template>
-  <div
-    v-if="error"
-    :class="['text-red-600 border-2 border-red-600 rounded-md py-1 px-2', className]"
+  <InlineMessage
+    v-if="error && error.length > 0"
+    severity="error"
   >
-    <span class="pi pi-exclamation-circle">&nbsp;{{ error }}</span>
-  </div>
+    {{ error.toString() }}
+  </InlineMessage>
 </template>

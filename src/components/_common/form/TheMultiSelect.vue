@@ -2,6 +2,7 @@
 import type { SelectOptionOrValueT, SelectOptionT } from "@/types"
 import type { MultiSelectPassThroughOptions } from "primevue/multiselect"
 import { watch } from "vue"
+import InputError from "@/components/_common/form/InputError.vue"
 
 type PropsT = {
   options: SelectOptionT[]
@@ -65,11 +66,6 @@ watch(
       :show-toggle-all="showToggleAll"
       @change="clearError"
     />
-    <InlineMessage
-      v-if="error && error.length > 0"
-      severity="error"
-    >
-      {{ error.toString() }}
-    </InlineMessage>
+    <InputError v-model:error="error" />
   </div>
 </template>

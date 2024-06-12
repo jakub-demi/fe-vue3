@@ -1,15 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
-import type {
-  ButtonSubmitTypeT,
-  OrderDataT,
-  OrderDatesT,
-  OrderErrorsT,
-  SelectOptionT,
-} from "@/types"
+import type { OrderDataT, OrderDatesT, OrderErrorsT, SelectOptionT } from "@/types"
 import InputField from "@/components/_common/form/InputField.vue"
 import authStore from "@/stores/authStore"
-import router from "@/router"
 import { createOrder, getOrderById, updateOrder } from "@/utils/services/orderService"
 import texts from "@/texts"
 import FormWrap from "@/components/_common/form/FormWrap.vue"
@@ -63,8 +56,6 @@ const submitData = ref<OrderDataT>({
 })
 
 const errors = ref<OrderErrorsT>({})
-
-const goBack = () => router.push({ name: "orders" })
 
 const handleSubmitClick = () => {
   if (props.id) {
@@ -139,7 +130,7 @@ onMounted(async () => {
     />
 
     <TheSelect
-      :disabled="viewMode || (!isUserAdmin && strLen(submitData.category_id) > 0)"
+      :disabled="viewMode"
       :hide-clear="!isUserAdmin && strLen(submitData.category_id) > 0"
       :label-text="texts.orders.form.labels.category"
       :placeholder="texts.orders.form.placeholders.selectCategory"
@@ -161,7 +152,7 @@ onMounted(async () => {
     />
 
     <FormButtons
-      :handle-back-fn="goBack"
+      back-btn-route="orders"
       :handle-submit-fn="handleSubmitClick"
       :btn-type="getSubmitBtnType(id)"
       :submit-loading="submitLoading"

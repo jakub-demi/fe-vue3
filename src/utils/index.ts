@@ -213,8 +213,9 @@ export const strLen = (value: number | string | null | undefined): number => {
 export const getSubmitBtnType = (id?: number): ButtonSubmitTypeT => (id ? "update" : "create")
 
 export const accessDeniedRedirect = (route: string, routeParams?: RouteParamsRaw) => {
-  router.replace({ name: route, params: routeParams })
-  setAccessDeniedToast()
+  router.replace({ name: route, params: routeParams }).then(() => {
+    setAccessDeniedToast()
+  })
 }
 
 export const handleAccessDenied = (
@@ -225,9 +226,10 @@ export const handleAccessDenied = (
   const isError = errorOrResponse instanceof AxiosError
 
   if (isError && errorOrResponse.response?.status === HttpStatusE.FORBIDDEN) {
-    router.replace({ name: route, params: routeParams })
     const errData = errorOrResponse.response.data as { message: string }
-    setErrorToast(errData.message)
+    router.replace({ name: route, params: routeParams }).then(() => {
+      setErrorToast(errData.message)
+    })
   } else if (!isError) {
     const hasAccess: boolean | null = errorOrResponse.data.data?.has_access
       ? errorOrResponse.data.data.has_access
@@ -237,4 +239,29 @@ export const handleAccessDenied = (
 
     accessDeniedRedirect(route, routeParams)
   }
+}
+
+export const handleWrongRequest = (route: string, routeParams?: RouteParamsRaw) => {
+  router.replace({ name: route, params: routeParams }).then(() => {
+    setErrorToast(texts.toast.errors.wrongRequest)
+  })
+}
+
+export const getCostWithVat = (
+  cost: number | undefined,
+  vat: number | undefined
+): number | undefined => {
+  return cost && vat ? cost + cost * vat : cost
+}
+
+export const getCostWithoutVat = (costWithVat: number, vat: number): number => {
+  return costWithVat / (1 + vat)
+}
+
+export const getKeyboardEventInputStrVal = (event: KeyboardEvent): string => {
+  return (event.target as HTMLInputElement).value
+}
+
+export const getKeyboardEventInputNumVal = (event: KeyboardEvent): number => {
+  return Number.parseFloat((event.target as HTMLInputElement).value)
 }

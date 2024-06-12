@@ -1,7 +1,19 @@
 import doAxios from "@/utils/doAxios"
-import { handleAccessDenied, handleResData } from "@/utils"
-import type { OrderItemDataTableT, OrderItemT, SelectOptionT } from "@/types"
-import { ref } from "vue"
+import {
+  handleAccessDenied,
+  handleInputErrors,
+  handleResData,
+  setAxiosSuccessToast,
+  unsetExcept,
+} from "@/utils"
+import type {
+  OrderItemDataT,
+  OrderItemDataTableT,
+  OrderItemErrorsT,
+  OrderItemT,
+  SelectOptionT,
+} from "@/types"
+import { ref, toRaw } from "vue"
 import type { Ref } from "vue"
 
 export const getOrderItems = async (orderId: number, orderItems: Ref<OrderItemT[]>) => {
@@ -48,4 +60,62 @@ export const getVatRatesSelectOptions = async (vatRatesOptions: Ref<SelectOption
       })
     })
   })
+}
+
+export const getOrderItemById = async (
+  orderId: number,
+  orderItemId: number,
+  dataForForm: Ref<OrderItemDataT>
+) => {
+  await doAxios(`/orders/${orderId}/order-items/${orderItemId}`, "get", true)
+    .then((res) => {
+      const data = res.data.data as OrderItemT
+      unsetExcept(data, ["name", "count", "cost", "vat"])
+
+      data.count = Number.parseFloat(String(data.count))
+      data.vat = Number.parseFloat(String(data.vat))
+
+      dataForForm.value = data
+    })
+    .catch((err) => {
+      handleAccessDenied(err, "order-items", { orderId: orderId })
+    })
+}
+
+export const createOrderItem = async (
+  orderId: number,
+  submitData: Ref<OrderItemDataT>,
+  submitLoading: Ref<boolean>,
+  errorsRef: Ref<OrderItemErrorsT>
+) => {
+  submitLoading.value = true
+
+  await doAxios(`/orders/${orderId}/order-items`, "post", true, toRaw(submitData.value))
+    .then(setAxiosSuccessToast)
+    .catch((err) => {
+      handleInputErrors(err, errorsRef)
+    })
+    .finally(() => (submitLoading.value = false))
+}
+
+export const updateOrderItem = async (
+  orderId: number,
+  orderItemId: number,
+  submitData: Ref<OrderItemDataT>,
+  submitLoading: Ref<boolean>,
+  errorsRef: Ref<OrderItemErrorsT>
+) => {
+  submitLoading.value = true
+
+  await doAxios(
+    `/orders/${orderId}/order-items/${orderItemId}`,
+    "put",
+    true,
+    toRaw(submitData.value)
+  )
+    .then(setAxiosSuccessToast)
+    .catch((err) => {
+      handleInputErrors(err, errorsRef)
+    })
+    .finally(() => (submitLoading.value = false))
 }

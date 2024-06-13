@@ -7,8 +7,12 @@ import OrderView from "@/views/dashboard/orders/OrderView.vue"
 import OrderEdit from "@/views/dashboard/orders/OrderEdit.vue"
 import OrderItemsIndex from "@/views/dashboard/orders/order-items/OrderItemsIndex.vue"
 import OrderItemCreate from "@/views/dashboard/orders/order-items/OrderItemCreate.vue"
-import OrderItemEdit from "@/views/dashboard/orders/order-items/OrderItemEdit.vue"
 import OrderItemView from "@/views/dashboard/orders/order-items/OrderItemView.vue"
+import OrderItemEdit from "@/views/dashboard/orders/order-items/OrderItemEdit.vue"
+import UsersIndex from "@/views/dashboard/users/UsersIndex.vue"
+import UserCreate from "@/views/dashboard/users/UserCreate.vue"
+import UserView from "@/views/dashboard/users/UserView.vue"
+import UserEdit from "@/views/dashboard/users/UserEdit.vue"
 
 const dashboardRoutes: RouteRecordRaw[] = [
   {
@@ -99,6 +103,39 @@ const dashboardRoutes: RouteRecordRaw[] = [
     component: OrderItemEdit,
     meta: {
       title: "Order Item - Edit",
+    },
+  },
+  //! Users Routes
+  {
+    path: "users",
+    name: "users",
+    component: UsersIndex,
+    meta: {
+      title: "Users",
+    },
+  },
+  {
+    path: "users/create",
+    name: "users.create",
+    component: UserCreate,
+    meta: {
+      title: "User - Create",
+    },
+  },
+  {
+    path: "users/view/:id",
+    name: "users.view",
+    component: UserView,
+    meta: {
+      title: "User - View",
+    },
+  },
+  {
+    path: "users/edit/:id",
+    name: "users.edit",
+    component: UserEdit,
+    meta: {
+      title: "User - Edit",
     },
   },
 ]

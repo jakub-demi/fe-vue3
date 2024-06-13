@@ -27,7 +27,7 @@ const props = withDefaults(defineProps<PropsT>(), {
 const model = defineModel("model", { required: true })
 const error = defineModel("error", { type: Array<string>, required: false })
 
-const textToDisplay = (value: number | string) => {
+const textToDisplay = (value: number | string | boolean) => {
   const found = props.options.filter(
     (item) => (item as StrKeyNumStrValT)[props.optionValue] === value
   )

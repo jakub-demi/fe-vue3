@@ -50,6 +50,7 @@ declare module 'vue' {
     TheDialog: typeof import('./src/components/_common/TheDialog.vue')['default']
     TheMultiSelect: typeof import('./src/components/_common/form/TheMultiSelect.vue')['default']
     TheSelect: typeof import('./src/components/_common/form/TheSelect.vue')['default']
+    UserForm: typeof import('./src/components/pages/dashboard/users/UserForm.vue')['default']
     UserProfileMenu: typeof import('./src/components/_layout/topbar/UserProfileMenu.vue')['default']
   }
 }

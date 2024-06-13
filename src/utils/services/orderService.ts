@@ -11,7 +11,6 @@ import {
 } from "@/utils"
 import type { OrderDataT, OrderDataTableT, OrderDatesT, OrderErrorsT, OrderT } from "@/types"
 import router from "@/router"
-import log from "@/utils/log"
 
 export const getOrders = async (orders: Ref<OrderT[]>) => {
   await doAxios("/orders", "get", true)
@@ -91,7 +90,7 @@ export const getOrderById = async (
       dataForForm.value.status = resData.current_status?.value
     })
     .catch((err) => {
-      router.push({ name: "orders" }).then(() => setAxiosErrorToast(err))
+      router.replace({ name: "orders" }).then(() => setAxiosErrorToast(err))
     })
 }
 

@@ -8,6 +8,7 @@ import OrderEdit from "@/views/dashboard/orders/OrderEdit.vue"
 import OrderItemsIndex from "@/views/dashboard/orders/order-items/OrderItemsIndex.vue"
 import OrderItemCreate from "@/views/dashboard/orders/order-items/OrderItemCreate.vue"
 import OrderItemEdit from "@/views/dashboard/orders/order-items/OrderItemEdit.vue"
+import OrderItemView from "@/views/dashboard/orders/order-items/OrderItemView.vue"
 
 const dashboardRoutes: RouteRecordRaw[] = [
   {
@@ -82,6 +83,14 @@ const dashboardRoutes: RouteRecordRaw[] = [
     component: OrderItemCreate,
     meta: {
       title: "Order Item - Create",
+    },
+  },
+  {
+    path: "orders/view/:orderId/items/view/:id",
+    name: "order-items.view",
+    component: OrderItemView,
+    meta: {
+      title: "Order Item - View",
     },
   },
   {

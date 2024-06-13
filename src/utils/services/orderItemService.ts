@@ -3,6 +3,7 @@ import {
   handleAccessDenied,
   handleInputErrors,
   handleResData,
+  setAxiosErrorToast,
   setAxiosSuccessToast,
   unsetExcept,
 } from "@/utils"
@@ -13,7 +14,7 @@ import type {
   OrderItemT,
   SelectOptionT,
 } from "@/types"
-import { ref, toRaw } from "vue"
+import { isRef, ref, toRaw } from "vue"
 import type { Ref } from "vue"
 
 export const getOrderItems = async (orderId: number, orderItems: Ref<OrderItemT[]>) => {
@@ -74,6 +75,7 @@ export const getOrderItemById = async (
 
       data.count = Number.parseFloat(String(data.count))
       data.vat = Number.parseFloat(String(data.vat))
+      data.cost = Number.parseFloat(String(data.cost))
 
       dataForForm.value = data
     })
@@ -101,21 +103,21 @@ export const createOrderItem = async (
 export const updateOrderItem = async (
   orderId: number,
   orderItemId: number,
-  submitData: Ref<OrderItemDataT>,
-  submitLoading: Ref<boolean>,
-  errorsRef: Ref<OrderItemErrorsT>
+  submitData: Ref<OrderItemDataT> | OrderItemDataT,
+  submitLoading?: Ref<boolean>,
+  errorsRef?: Ref<OrderItemErrorsT>
 ) => {
-  submitLoading.value = true
+  submitLoading && (submitLoading.value = true)
 
   await doAxios(
     `/orders/${orderId}/order-items/${orderItemId}`,
     "put",
     true,
-    toRaw(submitData.value)
+    isRef(submitData) ? toRaw(submitData.value) : submitData
   )
     .then(setAxiosSuccessToast)
     .catch((err) => {
-      handleInputErrors(err, errorsRef)
+      errorsRef ? handleInputErrors(err, errorsRef) : setAxiosErrorToast(err)
     })
-    .finally(() => (submitLoading.value = false))
+    .finally(() => submitLoading && (submitLoading.value = false))
 }

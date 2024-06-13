@@ -30,7 +30,7 @@ const toggle = (event: InteractEventT) => {
 }
 
 const confirmRemoval = () => {
-  dialog.showDialog(texts.actionsMenu.removal.confirmationText, () => doRemoval())
+  dialog.showDialog(texts.actionsMenu.removal.dialog.texts.confirmation, () => doRemoval())
 }
 
 const doRemoval = async () => {

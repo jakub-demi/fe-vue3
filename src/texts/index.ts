@@ -74,6 +74,12 @@ const texts = {
   table: {
     headers: {
       actions: "Actions",
+      editOptions: "Edit Options",
+    },
+    dialog: {
+      texts: {
+        updateRowConfirmation: "Are you sure you want to update row data?",
+      },
     },
   },
   toast: {
@@ -157,7 +163,11 @@ const texts = {
   },
   actionsMenu: {
     removal: {
-      confirmationText: "Are you sure you want to remove this item?",
+      dialog: {
+        texts: {
+          confirmation: "Are you sure you want to remove this item?",
+        },
+      },
     },
   },
 }

@@ -2,12 +2,7 @@
 import FormWrap from "@/components/_common/form/FormWrap.vue"
 import { onMounted, ref } from "vue"
 import InputField from "@/components/_common/form/InputField.vue"
-import {
-  getCostWithoutVat,
-  getCostWithVat,
-  getKeyboardEventInputNumVal,
-  getSubmitBtnType,
-} from "@/utils"
+import { calcCost, calcCostWithVat, getCostWithVat, getSubmitBtnType } from "@/utils"
 import FormButtons from "@/components/_common/form/FormButtons.vue"
 import type { OrderItemDataT, OrderItemErrorsT, SelectOptionT } from "@/types"
 import {
@@ -18,7 +13,6 @@ import {
 } from "@/utils/services/orderItemService"
 import texts from "@/texts"
 import TheSelect from "@/components/_common/form/TheSelect.vue"
-import log from "@/utils/log"
 
 type PropsT = {
   orderItemId?: number
@@ -55,7 +49,6 @@ onMounted(async () => {
 
   if (props.orderItemId && props.orderId) {
     await getOrderItemById(props.orderId, props.orderItemId, submitData).then(() => {
-      log(submitData.value.cost, "data.cost") //todo:dev remove
       costWithVat.value = getCostWithVat(submitData.value.cost, submitData.value.vat)
     })
   }
@@ -63,22 +56,11 @@ onMounted(async () => {
   formLoading.value = false
 })
 
-const calcCost = (event: KeyboardEvent) => {
-  const value = getKeyboardEventInputNumVal(event)
-  submitData.value.cost = Number.isNaN(value)
-    ? undefined
-    : getCostWithoutVat(value, submitData.value.vat)
+const calcCostWrap = (event: KeyboardEvent) => {
+  submitData.value.cost = calcCost(submitData.value.vat, event)
 }
-
-const calcCostWithVat = (event?: KeyboardEvent) => {
-  if (event) {
-    const value = getKeyboardEventInputNumVal(event)
-    costWithVat.value = Number.isNaN(value)
-      ? undefined
-      : getCostWithVat(value, submitData.value.vat)
-  } else {
-    costWithVat.value = getCostWithVat(submitData.value.cost, submitData.value.vat)
-  }
+const calcCostWithVatWrap = (event?: KeyboardEvent) => {
+  calcCostWithVat(submitData.value.cost, submitData.value.vat, event, costWithVat)
 }
 </script>
 
@@ -106,7 +88,7 @@ const calcCostWithVat = (event?: KeyboardEvent) => {
       :label-text="texts.orders.orderItems.form.labels.cost"
       v-model:input="submitData.cost"
       v-model:error="errors.cost"
-      :handle-keyup="calcCostWithVat"
+      :handle-keyup="calcCostWithVatWrap"
     />
 
     <TheSelect
@@ -116,16 +98,17 @@ const calcCostWithVat = (event?: KeyboardEvent) => {
       :hide-clear="true"
       v-model:model="submitData.vat"
       v-model:error="errors.vat"
-      :handle-change="() => calcCostWithVat()"
+      :handle-change="() => calcCostWithVatWrap()"
     />
 
     <InputField
       :disabled="viewMode"
       input-type="number"
       :max-fraction-digits="2"
+      :max-digit="119999"
       :label-text="texts.orders.orderItems.form.labels.costWithVat"
       v-model:input="costWithVat"
-      :handle-keyup="calcCost"
+      :handle-keyup="calcCostWrap"
     />
 
     <FormButtons

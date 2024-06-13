@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
-import { intParseWithCheck } from "@/utils"
+import { areObjectsEqual, handleWrongRequest, intParseWithCheck } from "@/utils"
 import type {
+  OrderItemDataT,
   OrderItemDataTableT,
   OrderItemsTableSlotPropsT,
   RouteParamT,
@@ -10,14 +11,18 @@ import type {
 import ActionsMenu from "@/components/dataTable/ActionsMenu.vue"
 import DataGrid from "@/components/dataTable/DataGrid.vue"
 import texts from "@/texts"
-import { getOrderItemsForTable, getVatRatesSelectOptions } from "@/utils/services/orderItemService"
-import router from "@/router"
+import {
+  getOrderItemsForTable,
+  getVatRatesSelectOptions,
+  updateOrderItem,
+} from "@/utils/services/orderItemService"
 import { useRoute } from "vue-router"
 import type { DataTableRowEditCancelEvent, DataTableRowEditSaveEvent } from "primevue/datatable"
-import TheSelect from "@/components/_common/form/TheSelect.vue"
-import TheButton from "@/components/_common/form/TheButton.vue"
+import dialogStore from "@/stores/dialogStore"
 
 const route = useRoute()
+const dialog = dialogStore()
+
 const orderId = ref<number>(-1)
 
 const orderItemsTable = ref<OrderItemDataTableT[]>([])
@@ -33,7 +38,28 @@ const handleDataLoad = async () => {
 }
 
 const handleRowEditSave = (event: DataTableRowEditSaveEvent): void => {
-  //todo:dev - add confirm window to save items to DB or decline then call handleDataLoad()
+  const oldData = event.data as OrderItemDataTableT
+  const newData = event.newData as OrderItemDataTableT
+
+  if (areObjectsEqual(oldData, newData)) {
+    handleDataLoad()
+    return
+  }
+
+  const orderItemId = oldData.id
+
+  const save = () => {
+    const data: OrderItemDataT = {
+      vat: newData.vat,
+      name: newData.name,
+      count: newData.count,
+      cost: newData.cost,
+    }
+
+    updateOrderItem(orderId.value, orderItemId, data).finally(() => handleDataLoad())
+  }
+
+  dialog.showDialog(texts.table.dialog.texts.updateRowConfirmation, save, handleDataLoad)
 }
 
 const handleRowEditCancel = (event: DataTableRowEditCancelEvent): void => {
@@ -44,29 +70,15 @@ onMounted(async () => {
   const orderIdParam = intParseWithCheck(route.params.orderId as RouteParamT)
 
   if (!orderIdParam) {
-    router.replace({ name: "orders" })
+    handleWrongRequest("orders")
     return
   }
 
   orderId.value = orderIdParam
 
   await getVatRatesSelectOptions(vatRatesOptions)
-
   await handleDataLoad()
 })
-
-//todo:dev
-const backBtnTarget = "orders"
-const createBtnTarget = "order-items"
-const backBtnText = "Back"
-const createBtnText = "Create"
-
-const handleBack = () => {
-  router.push({ name: backBtnTarget })
-}
-const handleCreate = () => {
-  router.push({ name: createBtnTarget })
-}
 </script>
 
 <template>
@@ -82,41 +94,6 @@ const handleCreate = () => {
       data-key="id"
       v-model:editing-rows="editingRows"
     >
-      <!--    <DataTable-->
-      <!--      :loading="loading"-->
-      <!--      :value="orderItemsTable"-->
-      <!--      :rows="15"-->
-      <!--      :paginator="true"-->
-      <!--      :rows-per-page-options="[5, 15, 25, 35, 45]"-->
-      <!--      paginator-template="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"-->
-      <!--      show-gridlines-->
-      <!--      class="lg:min-w-[50rem]"-->
-      <!--      v-model:editing-rows="editingRows"-->
-      <!--      edit-mode="row"-->
-      <!--      data-key="id"-->
-      <!--      @row-edit-save="handleRowEditSave"-->
-      <!--      @row-edit-cancel="handleRowEditCancel"-->
-      <!--    >-->
-      <!--      <template-->
-      <!--        v-if="backBtnTarget || createBtnTarget"-->
-      <!--        #header-->
-      <!--      >-->
-      <!--        <div class="flex flex-row gap-2">-->
-      <!--          <TheButton-->
-      <!--            v-if="backBtnTarget"-->
-      <!--            icon="pi pi-arrow-left"-->
-      <!--            :text="backBtnText"-->
-      <!--            :handle-click="handleBack"-->
-      <!--          />-->
-      <!--          <TheButton-->
-      <!--            v-if="createBtnTarget"-->
-      <!--            icon="pi pi-plus"-->
-      <!--            :text="createBtnText"-->
-      <!--            :handle-click="handleCreate"-->
-      <!--          />-->
-      <!--        </div>-->
-      <!--      </template>-->
-
       <Column
         :sortable="true"
         field="name"
@@ -184,7 +161,7 @@ const handleCreate = () => {
         </template>
       </Column>
       <Column
-        header="Edit Options"
+        :header="texts.table.headers.editOptions"
         :rowEditor="true"
         class="text-center w-[14%]"
       />
@@ -201,7 +178,6 @@ const handleCreate = () => {
           />
         </template>
       </Column>
-      <!--    </DataTable>-->
     </DataGrid>
   </div>
 </template>

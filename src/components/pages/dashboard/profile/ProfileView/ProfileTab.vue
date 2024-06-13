@@ -9,12 +9,11 @@ import {
 import texts from "@/texts"
 import doAxios from "@/utils/doAxios"
 import authStore from "@/stores/authStore"
-import { mergeProps, ref } from "vue"
+import { ref } from "vue"
 import type { UpdateProfileFormT, UserProfileErrorT } from "@/types"
 import TheButton from "@/components/_common/form/TheButton.vue"
 import FileInput from "@/components/_common/form/FileInput.vue"
 import InputField from "@/components/_common/form/InputField.vue"
-import log from "@/utils/log"
 
 const auth = authStore()
 

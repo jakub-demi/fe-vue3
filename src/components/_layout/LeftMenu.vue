@@ -9,6 +9,7 @@ const items: MenuItem[] = [
     icon: "pi pi-home",
     command: () => go("dashboard"),
   },
+  //! Orders
   {
     label: texts.leftMenu.orders.index,
     icon: "pi pi-shopping-cart",
@@ -20,6 +21,21 @@ const items: MenuItem[] = [
       {
         label: texts.leftMenu.orders.create,
         command: () => go("orders.create"),
+      },
+    ],
+  },
+  //! Users
+  {
+    label: texts.leftMenu.users.index,
+    icon: "pi pi-users",
+    items: [
+      {
+        label: texts.leftMenu.users.all,
+        command: () => go("users"),
+      },
+      {
+        label: texts.leftMenu.users.create,
+        command: () => go("users.create"),
       },
     ],
   },

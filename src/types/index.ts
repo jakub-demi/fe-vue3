@@ -20,6 +20,36 @@ export type UserT = {
   avatar?: UserAvatarT
 }
 
+export type UserDataTableT = {
+  id: number
+  email: string
+  firstname: string
+  lastname: string
+  is_admin: boolean
+}
+
+export type UserTableSlotPropsT = {
+  data: UserDataTableT
+}
+
+export type UserDataT = {
+  firstname: string
+  lastname: string
+  email: string
+  password?: string
+  password_confirmation?: string
+  is_admin: boolean
+}
+
+export type UserErrorsT = {
+  firstname?: string[]
+  lastname?: string[]
+  email?: string[]
+  password?: string[]
+  password_confirmation?: string[]
+  is_admin?: string[]
+}
+
 export type UpdateProfileFormT = {
   email?: string
   firstname?: string
@@ -27,7 +57,7 @@ export type UpdateProfileFormT = {
   avatar?: File
 }
 
-export type UserErrorT = {
+export type UserProfileErrorT = {
   email?: string
   firstname?: string
   lastname?: string
@@ -173,7 +203,7 @@ export type StrKeyNumValT = { [key: string]: number }
 
 export type StrKeyNumStrValT = { [key: string]: number | string }
 
-export type SelectOptionT = { option: number | string; value: number | string }
+export type SelectOptionT = { option: number | string; value: number | string | boolean }
 
 export type ErrorResponseDataT = {
   errors: { [key: string]: string[] }

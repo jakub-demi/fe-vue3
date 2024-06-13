@@ -1,10 +1,16 @@
 <script setup lang="ts">
-import { buildFilesFormData, getUserAvatar, handleInputErrors, setToast } from "@/utils"
+import {
+  buildFilesFormData,
+  getUserAvatar,
+  getUserInitials,
+  handleInputErrors,
+  setToast,
+} from "@/utils"
 import texts from "@/texts"
 import doAxios from "@/utils/doAxios"
 import authStore from "@/stores/authStore"
-import { ref } from "vue"
-import type { UpdateProfileFormT, UserErrorT } from "@/types"
+import { mergeProps, ref } from "vue"
+import type { UpdateProfileFormT, UserProfileErrorT } from "@/types"
 import TheButton from "@/components/_common/form/TheButton.vue"
 import FileInput from "@/components/_common/form/FileInput.vue"
 import InputField from "@/components/_common/form/InputField.vue"
@@ -18,7 +24,7 @@ const userData = ref<UpdateProfileFormT | null>({
   lastname: auth.getUser?.lastname,
   avatar: undefined,
 })
-const errors = ref<UserErrorT>({
+const errors = ref<UserProfileErrorT>({
   email: undefined,
   firstname: undefined,
   lastname: undefined,
@@ -47,9 +53,10 @@ const save = () => {
 <template>
   <div v-if="userData">
     <Avatar
-      :image="getUserAvatar()"
-      :pt="{ root: { class: 'size-20' } }"
-      class="mb-2 rounded-full border-2 border-black"
+      :label="!getUserAvatar() ? getUserInitials() : undefined"
+      :image="getUserAvatar() ? getUserAvatar() : undefined"
+      :pt="{ root: 'size-20', label: 'text-4xl' }"
+      class="flex items-center justify-center mb-2 rounded-full border-2 border-black"
       shape="circle"
     />
     <form @submit.prevent="save">

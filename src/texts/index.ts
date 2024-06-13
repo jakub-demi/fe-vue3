@@ -22,6 +22,11 @@ const texts = {
       all: "All Orders",
       create: "Create Order",
     },
+    users: {
+      index: "Users",
+      all: "All Users",
+      create: "Create User",
+    },
   },
   dashboardLayout: {
     menu: "Menu",
@@ -147,6 +152,26 @@ const texts = {
           vat: "VAT",
           costWithVat: "Cost with VAT",
         },
+      },
+    },
+  },
+  users: {
+    table: {
+      headers: {
+        firstname: "First Name",
+        lastname: "Last Name",
+        email: "Email",
+        isAdmin: "Is User Admin?",
+      },
+    },
+    form: {
+      labels: {
+        firstname: "First Name",
+        lastname: "Last Name",
+        email: "Email",
+        password: "Password",
+        passwordConfirmation: "Password Again",
+        isAdmin: "Role",
       },
     },
   },

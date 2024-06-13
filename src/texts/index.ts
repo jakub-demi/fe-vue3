@@ -74,6 +74,12 @@ const texts = {
   table: {
     headers: {
       actions: "Actions",
+      editOptions: "Edit Options",
+    },
+    dialog: {
+      texts: {
+        updateRowConfirmation: "Are you sure you want to update row data?",
+      },
     },
   },
   toast: {
@@ -122,6 +128,27 @@ const texts = {
         selectStatus: "Select a Status",
       },
     },
+
+    orderItems: {
+      table: {
+        headers: {
+          name: "Item Name",
+          count: "Count",
+          cost: "Cost",
+          vat: "VAT",
+          costWithVat: "Cost with VAT",
+        },
+      },
+      form: {
+        labels: {
+          name: "Item Name",
+          count: "Count",
+          cost: "Cost",
+          vat: "VAT",
+          costWithVat: "Cost with VAT",
+        },
+      },
+    },
   },
   dialog: {
     buttons: {
@@ -136,7 +163,11 @@ const texts = {
   },
   actionsMenu: {
     removal: {
-      confirmationText: "Are you sure you want to remove this item?",
+      dialog: {
+        texts: {
+          confirmation: "Are you sure you want to remove this item?",
+        },
+      },
     },
   },
 }

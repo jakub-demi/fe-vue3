@@ -2,17 +2,14 @@
 import OrderForm from "@/components/pages/dashboard/orders/OrderForm.vue"
 import { useRoute } from "vue-router"
 import type { RouteParamT } from "@/types"
-import { intParseWithCheck, setErrorToast } from "@/utils"
+import { handleWrongRequest, intParseWithCheck } from "@/utils"
 import { onMounted } from "vue"
-import router from "@/router"
-import texts from "@/texts"
 
 const route = useRoute()
 const param = intParseWithCheck(route.params.id as RouteParamT)
 
 onMounted(() => {
-  !param &&
-    router.push({ name: "orders" }).then(() => setErrorToast(texts.toast.errors.wrongRequest))
+  !param && handleWrongRequest("orders")
 })
 </script>
 

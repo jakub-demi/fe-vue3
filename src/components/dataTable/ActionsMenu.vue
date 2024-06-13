@@ -18,6 +18,7 @@ type PropsT = {
   additionalActionsTitle?: string
   additionalActions?: MenuItem[]
   permissions?: ActionsMenuPermissionsT
+  extAxiosDeletePath?: string
 }
 
 const props = defineProps<PropsT>()
@@ -29,11 +30,11 @@ const toggle = (event: InteractEventT) => {
 }
 
 const confirmRemoval = () => {
-  dialog.showDialog(texts.actionsMenu.removal.confirmationText, () => doRemoval())
+  dialog.showDialog(texts.actionsMenu.removal.dialog.texts.confirmation, () => doRemoval())
 }
 
 const doRemoval = async () => {
-  await doAxios(`/${props.route}/${props.id}`, "delete", true)
+  await doAxios(props.extAxiosDeletePath ?? `/${props.route}/${props.id}`, "delete", true)
     .then(async (res) => {
       setAxiosSuccessToast(res)
       await props.handleReloadAsyncFn()

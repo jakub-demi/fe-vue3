@@ -1,19 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
-import type {
-  ButtonSubmitTypeT,
-  OrderDataT,
-  OrderDatesT,
-  OrderErrorsT,
-  SelectOptionT,
-} from "@/types"
+import type { OrderDataT, OrderDatesT, OrderErrorsT, SelectOptionT } from "@/types"
 import InputField from "@/components/_common/form/InputField.vue"
 import authStore from "@/stores/authStore"
-import router from "@/router"
 import { createOrder, getOrderById, updateOrder } from "@/utils/services/orderService"
 import texts from "@/texts"
 import FormWrap from "@/components/_common/form/FormWrap.vue"
-import { dateIfNotEmpty, strLen, tomorrowDate } from "@/utils"
+import { dateIfNotEmpty, getSubmitBtnType, strLen, tomorrowDate } from "@/utils"
 import DateTimePicker from "@/components/_common/form/DateTimePicker.vue"
 import TheSelect from "@/components/_common/form/TheSelect.vue"
 import { getUsersSelectOptions } from "@/utils/services/userService"
@@ -64,8 +57,6 @@ const submitData = ref<OrderDataT>({
 
 const errors = ref<OrderErrorsT>({})
 
-const goBack = () => router.push({ name: "orders" })
-
 const handleSubmitClick = () => {
   if (props.id) {
     updateOrder(props.id, submitData, submitLoading, errors)
@@ -73,8 +64,6 @@ const handleSubmitClick = () => {
     createOrder(submitData, submitLoading, errors)
   }
 }
-
-const submitType = (): ButtonSubmitTypeT => (props.id ? "update" : "create")
 
 onMounted(async () => {
   await getUsersSelectOptions(usersToChooseFrom)
@@ -141,7 +130,7 @@ onMounted(async () => {
     />
 
     <TheSelect
-      :disabled="viewMode || (!isUserAdmin && strLen(submitData.category_id) > 0)"
+      :disabled="viewMode"
       :hide-clear="!isUserAdmin && strLen(submitData.category_id) > 0"
       :label-text="texts.orders.form.labels.category"
       :placeholder="texts.orders.form.placeholders.selectCategory"
@@ -163,9 +152,9 @@ onMounted(async () => {
     />
 
     <FormButtons
-      :handle-back-fn="goBack"
+      back-btn-route="orders"
       :handle-submit-fn="handleSubmitClick"
-      :btn-type="submitType()"
+      :btn-type="getSubmitBtnType(id)"
       :submit-loading="submitLoading"
       :submit-hidden="!!id && viewMode"
     />

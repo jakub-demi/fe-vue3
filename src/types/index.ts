@@ -105,30 +105,47 @@ export type OrderErrorsT = {
   created_at?: string[]
 }
 
-export type OrderDataCreateT = {
-  due_date: Date | string
-  order_users: number[]
-  customer_name: string
-  customer_address: string
-  category_id?: number
-  status?: string
-}
-
-export type OrderDataUpdateT = {
-  due_date: Date | string
-  payment_date: Date | string | null
-  created_at: Date | string
-  order_users: number[]
-  customer_name: string
-  customer_address: string
-  category_id?: number
-  status?: string
-}
-
 export type OrderDatesT = {
   due_date: Date | string
   payment_date?: Date | string | null
   created_at: Date | string
+}
+
+export type OrderItemT = {
+  id: number
+  order_id: number
+  name: string
+  count: number
+  cost: number
+  vat: number
+  cost_with_vat: number
+}
+
+export type OrderItemDataTableT = {
+  id: number
+  name: string
+  count: number
+  cost: number
+  vat: number
+  cost_with_vat: number
+}
+
+export type OrderItemsTableSlotPropsT = {
+  data: OrderItemDataTableT
+}
+
+export type OrderItemDataT = {
+  name: string
+  count: number
+  cost?: number
+  vat: number
+}
+
+export type OrderItemErrorsT = {
+  name?: string[]
+  count?: string[]
+  cost?: string[]
+  vat?: string[]
 }
 
 export type OrderCategoryT = {
@@ -165,7 +182,7 @@ export type ErrorResponseDataT = {
 
 export type SelectOptionOrValueT = "option" | "value"
 
-export type RouteParamT = number | string
+export type RouteParamT = number | string | undefined
 
 export type ButtonTypeT = "save" | "create" | "update" | "submit" | "button"
 

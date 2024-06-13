@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import TheButton from "@/components/_common/form/TheButton.vue"
 import router from "@/router"
+import type { PVDataTableEditModeT } from "@/types/primevue"
+import type { DataTableRowEditCancelEvent, DataTableRowEditSaveEvent } from "primevue/datatable"
 
 defineSlots()
 
@@ -10,19 +12,32 @@ type PropsT = {
   createBtnTarget?: string
   createBtnText?: string
   createBtnClickHandler?: Function
+  backBtnTarget?: string
+  backBtnText?: string
+  editMode?: PVDataTableEditModeT
+  dataKey?: string
+  handleRowEditSave?: (event: DataTableRowEditSaveEvent) => void
+  handleRowEditCancel?: (event: DataTableRowEditCancelEvent) => void
 }
 
 const props = withDefaults(defineProps<PropsT>(), {
   header: false,
   createBtnText: "Create",
+  backBtnText: "Back",
 })
 
-const handleClick = (): void => {
+const editingRows = defineModel("editingRows", { type: Array<any>, required: false })
+
+const handleCreate = (): void => {
   props.createBtnClickHandler ? props.createBtnClickHandler() : createNew()
 }
 
 const createNew = (): void => {
   router.push({ name: `${props.createBtnTarget}.create` })
+}
+
+const handleBack = (): void => {
+  router.push({ name: props.backBtnTarget })
 }
 </script>
 
@@ -36,16 +51,30 @@ const createNew = (): void => {
     paginator-template="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
     show-gridlines
     class="lg:min-w-[50rem]"
+    v-model:editing-rows="editingRows"
+    :edit-mode="editMode"
+    :data-key="dataKey"
+    @row-edit-save="handleRowEditSave"
+    @row-edit-cancel="handleRowEditCancel"
   >
     <template
-      v-if="createBtnTarget"
+      v-if="backBtnTarget || createBtnTarget"
       #header
     >
-      <TheButton
-        icon="pi pi-plus"
-        :text="createBtnText"
-        :handle-click="handleClick"
-      />
+      <div class="flex flex-row gap-2">
+        <TheButton
+          v-if="backBtnTarget"
+          icon="pi pi-arrow-left"
+          :text="backBtnText"
+          :handle-click="handleBack"
+        />
+        <TheButton
+          v-if="createBtnTarget"
+          icon="pi pi-plus"
+          :text="createBtnText"
+          :handle-click="handleCreate"
+        />
+      </div>
     </template>
 
     <slot />

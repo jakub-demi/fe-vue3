@@ -1,10 +1,16 @@
-import type { ErrorResponseDataT, SeverityT, UserT } from "@/types"
-import type { AxiosError, AxiosResponse } from "axios"
+import type { ErrorResponseDataT, SeverityT, UserT, ButtonSubmitTypeT } from "@/types"
+import type { AxiosError as AxiosErrorT, AxiosResponse } from "axios"
+import { AxiosError } from "axios"
 import type { Ref } from "vue"
 import authStore from "@/stores/authStore"
 import log from "@/utils/log"
 import toastServiceStore from "@/stores/toastServiceStore"
 import texts from "@/texts"
+import router from "@/router"
+import type { RouteParamsRaw } from "vue-router"
+import { HttpStatusE } from "@/types/enums"
+import { isRef } from "vue"
+import isEqual from "lodash.isequal"
 
 export const setToast = (message: string, severity?: SeverityT, title?: string, life?: number) => {
   const toast = toastServiceStore().toast
@@ -168,10 +174,12 @@ export const unsetExcept = <T extends { [key: string]: any }>(
   })
 }
 
-export const intParseWithCheck = (param: number | string): number | undefined => {
+export const intParseWithCheck = (
+  param: number | string | null | undefined
+): number | undefined => {
   if (typeof param === "number") return param
 
-  const parsed = Number.parseInt(param)
+  const parsed = Number.parseInt(`${param}`)
 
   return Number.isNaN(parsed) ? undefined : parsed
 }
@@ -202,4 +210,111 @@ export const capitalizeFirstLetter = (str: string): string => {
 
 export const strLen = (value: number | string | null | undefined): number => {
   return value ? value.toString().length : -1
+}
+
+export const getSubmitBtnType = (id?: number): ButtonSubmitTypeT => (id ? "update" : "create")
+
+export const accessDeniedRedirect = (route: string, routeParams?: RouteParamsRaw) => {
+  router.replace({ name: route, params: routeParams }).then(() => {
+    setAccessDeniedToast()
+  })
+}
+
+export const handleAccessDenied = (
+  errorOrResponse: AxiosErrorT | AxiosResponse,
+  route: string,
+  routeParams?: RouteParamsRaw
+) => {
+  const isError = errorOrResponse instanceof AxiosError
+
+  if (isError && errorOrResponse.response?.status === HttpStatusE.FORBIDDEN) {
+    const errData = errorOrResponse.response.data as { message: string }
+    router.replace({ name: route, params: routeParams }).then(() => {
+      setErrorToast(errData.message)
+    })
+  } else if (!isError) {
+    const hasAccess: boolean | null = errorOrResponse.data.data?.has_access
+      ? errorOrResponse.data.data.has_access
+      : null
+
+    if (hasAccess) return
+
+    accessDeniedRedirect(route, routeParams)
+  }
+}
+
+export const handleWrongRequest = (route: string, routeParams?: RouteParamsRaw) => {
+  router.replace({ name: route, params: routeParams }).then(() => {
+    setErrorToast(texts.toast.errors.wrongRequest)
+  })
+}
+
+export const getCostWithVat = (
+  cost: number | undefined,
+  vat: number | undefined
+): number | undefined => {
+  return cost && vat ? cost + cost * vat : cost
+}
+
+export const getCostWithoutVat = (costWithVat: number, vat: number): number => {
+  return costWithVat / (1 + vat)
+}
+
+export const numerize = (value: string | number): number => {
+  return typeof value === "number"
+    ? value
+    : Number.parseFloat(value.replace(/\s+/g, "").replace(/,+/g, "."))
+}
+
+export const getKeyboardEventInputStrVal = (event: KeyboardEvent): string => {
+  return (event.target as HTMLInputElement).value
+}
+
+export const getKeyboardEventInputNumVal = (event: KeyboardEvent): number => {
+  return numerize((event.target as HTMLInputElement).value)
+}
+
+export const calcCost = (
+  vat: number,
+  event: KeyboardEvent,
+  cost?: Ref<number | undefined>
+): number | undefined => {
+  const value = getKeyboardEventInputNumVal(event)
+  const assignment = Number.isNaN(value) ? undefined : getCostWithoutVat(value, vat)
+
+  if (cost && isRef(cost)) {
+    cost.value = assignment
+  }
+
+  return assignment
+}
+
+export const calcCostWithVat = (
+  cost: number | undefined,
+  vat: number,
+  event?: KeyboardEvent,
+  costWithVat?: Ref<number | undefined>
+): number | undefined => {
+  if (event) {
+    const value = getKeyboardEventInputNumVal(event)
+    const assignment = Number.isNaN(value) ? undefined : getCostWithVat(value, vat)
+
+    if (costWithVat && isRef(costWithVat)) {
+      costWithVat.value = assignment
+    }
+
+    return assignment
+  } else {
+    const gotCostWithVat = getCostWithVat(cost, vat)
+
+    if (costWithVat && isRef(costWithVat)) {
+      costWithVat.value = gotCostWithVat
+    }
+
+    return gotCostWithVat
+  }
+}
+
+export const areObjectsEqual = (object1: object, object2: object): boolean => {
+  return isEqual(object1, object2)
 }

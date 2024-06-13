@@ -5,6 +5,10 @@ import OrdersIndex from "@/views/dashboard/orders/OrdersIndex.vue"
 import OrderCreate from "@/views/dashboard/orders/OrderCreate.vue"
 import OrderView from "@/views/dashboard/orders/OrderView.vue"
 import OrderEdit from "@/views/dashboard/orders/OrderEdit.vue"
+import OrderItemsIndex from "@/views/dashboard/orders/order-items/OrderItemsIndex.vue"
+import OrderItemCreate from "@/views/dashboard/orders/order-items/OrderItemCreate.vue"
+import OrderItemEdit from "@/views/dashboard/orders/order-items/OrderItemEdit.vue"
+import OrderItemView from "@/views/dashboard/orders/order-items/OrderItemView.vue"
 
 const dashboardRoutes: RouteRecordRaw[] = [
   {
@@ -15,6 +19,14 @@ const dashboardRoutes: RouteRecordRaw[] = [
       title: "Dashboard",
     },
   },
+  // {
+  //   path: "test",
+  //   name: "test",
+  //   component: () => import("@/views/_t/TheTest.vue"),
+  //   meta: {
+  //     title: "Test",
+  //   },
+  // },
   {
     path: "profile",
     name: "profile",
@@ -56,13 +68,38 @@ const dashboardRoutes: RouteRecordRaw[] = [
       title: "Order - Edit",
     },
   },
-  // {
-  //   path: "test",
-  //   name: "test",
-  //   component: () => import("@/views/_t/TheTest.vue"),
-  //   meta: {
-  //     title: "Test",
-  //   },
-  // },
+  //! Order Items Routes
+  {
+    path: "orders/view/:orderId/items",
+    name: "order-items",
+    component: OrderItemsIndex,
+    meta: {
+      title: "Order Items",
+    },
+  },
+  {
+    path: "orders/view/:orderId/items/create",
+    name: "order-items.create",
+    component: OrderItemCreate,
+    meta: {
+      title: "Order Item - Create",
+    },
+  },
+  {
+    path: "orders/view/:orderId/items/view/:id",
+    name: "order-items.view",
+    component: OrderItemView,
+    meta: {
+      title: "Order Item - View",
+    },
+  },
+  {
+    path: "orders/view/:orderId/items/edit/:id",
+    name: "order-items.edit",
+    component: OrderItemEdit,
+    meta: {
+      title: "Order Item - Edit",
+    },
+  },
 ]
 export default dashboardRoutes

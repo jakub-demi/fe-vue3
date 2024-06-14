@@ -203,6 +203,8 @@ export type StrKeyNumValT = { [key: string]: number }
 
 export type StrKeyNumStrValT = { [key: string]: number | string }
 
+export type StrKeyAnyValT = { [key: string]: any }
+
 export type SelectOptionT = { option: number | string; value: number | string | boolean }
 
 export type ErrorResponseDataT = {

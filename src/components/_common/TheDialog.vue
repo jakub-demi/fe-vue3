@@ -46,7 +46,7 @@ const handleDecline = () => {
           (store.current.confirmFn ? texts.dialog.buttons.decline : texts.dialog.buttons.ok)
         "
         :handle-click="handleDecline"
-        icon="pi pi-times"
+        :icon="store.current.confirmFn ? 'pi pi-times' : 'pi pi-check'"
       />
     </div>
   </Dialog>

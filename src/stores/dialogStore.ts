@@ -57,6 +57,12 @@ const dialogStore = defineStore("dialogStore", {
       this.current.declineBtnText = declineBtnText
       this.current.className = className
     },
+
+    showDialogText(text: string, className?: string): void {
+      this.current.visible = true
+      this.current.text = text
+      this.current.className = className
+    },
   },
 })
 

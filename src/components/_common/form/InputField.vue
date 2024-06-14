@@ -8,12 +8,14 @@ type PropsT = {
   labelText?: string
   className?: string
   disabled?: boolean
+  autofocus?: boolean
   minDigit?: number
   maxDigit?: number
   roundingMode?: RoundingMode
   minFractionDigits?: number
   maxFractionDigits?: number
   handleKeydown?: (event: KeyboardEvent) => void
+  handleKeydownEnter?: (event: KeyboardEvent) => void
   handleKeyup?: (event: KeyboardEvent) => void
   handleChange?: () => void
 }
@@ -22,9 +24,11 @@ const props = withDefaults(defineProps<PropsT>(), {
   inputType: "text",
   className: "",
   disabled: false,
+  autofocus: false,
   minDigit: 0,
   maxDigit: 99999,
   handleKeydown: (event: KeyboardEvent) => void 0,
+  handleKeydownEnter: (event: KeyboardEvent) => void 0,
   handleKeyup: (event: KeyboardEvent) => void 0,
   handleChange: () => void 0,
 })
@@ -41,6 +45,11 @@ const handleKeydownPress = (event: KeyboardEvent) => {
   clearError()
   props.handleKeydown(event)
 }
+
+const handleEnterKeydownPress = (event: KeyboardEvent) => {
+  clearError()
+  props.handleKeydownEnter(event)
+}
 </script>
 
 <template>
@@ -54,9 +63,11 @@ const handleKeydownPress = (event: KeyboardEvent) => {
       v-model="input"
       :type="inputType"
       @keydown="(event: KeyboardEvent) => handleKeydownPress(event)"
+      @keydown.enter="(event: KeyboardEvent) => handleEnterKeydownPress(event)"
       @keyup="(event: KeyboardEvent) => handleKeyup(event)"
       @update:model-value="handleChange"
       :invalid="error && error.length > 0"
+      :autofocus="autofocus"
     />
     <InputNumber
       v-if="inputType === 'number'"
@@ -64,9 +75,11 @@ const handleKeydownPress = (event: KeyboardEvent) => {
       v-model="input"
       :type="inputType"
       @keydown="(event: KeyboardEvent) => handleKeydownPress(event)"
+      @keydown.enter="(event: KeyboardEvent) => handleEnterKeydownPress(event)"
       @keyup="(event: KeyboardEvent) => handleKeyup(event)"
       @update:model-value="handleChange"
       :invalid="error && error.length > 0"
+      :autofocus="autofocus"
       :min="minDigit"
       :max="maxDigit"
       :rounding-mode="roundingMode"

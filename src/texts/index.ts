@@ -14,6 +14,30 @@ const texts = {
       forgotPassword: "Forgot Password",
       loginLabel: "Login",
     },
+    forgotPassword: {
+      emailSent: "Confirmation email for password reset was sent to your email.",
+      header: "Forgot Password",
+      description:
+        "If you forgot your password, we can send you password reset link to your email.",
+      email: "Email",
+      buttons: {
+        send: "Send",
+        cancel: "Cancel",
+      },
+    },
+    resetPassword: {
+      passwordChangeSuccess: "Your password change was successful, you can login now.",
+      header: "Change Password",
+      description: "Now you can change your password.",
+      labels: {
+        password: "Password",
+        passwordConfirmation: "Password Again",
+      },
+      buttons: {
+        change: "Change",
+        cancel: "Cancel",
+      },
+    },
   },
   leftMenu: {
     dashboard: "Dashboard",

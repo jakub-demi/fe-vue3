@@ -2,20 +2,21 @@
 import texts from "@/texts"
 import { ref } from "vue"
 import type { CredentialsT } from "@/types"
-import { forgotPassword } from "@/utils/auth"
 import authStore from "@/stores/authStore"
+import ForgotPasswordDialog from "@/components/pages/login/ForgotPasswordDialog.vue"
+import ResetPasswordDialog from "@/components/pages/login/ResetPasswordDialog.vue"
 
 const auth = authStore()
 
 const credentials = ref<CredentialsT>({ email: "", password: "" })
 const loginErrors = ref<string | undefined>()
 
+const showForgotPasswordDialog = ref<boolean>(false)
+
 const btnItems = [
   {
     label: texts.login.splitBtn.forgotPassword,
-    command: () => {
-      forgotPassword()
-    },
+    command: () => (showForgotPasswordDialog.value = true),
   },
 ]
 
@@ -31,6 +32,12 @@ const hideErrors = () => (loginErrors.value = undefined)
 </script>
 
 <template>
+  <ForgotPasswordDialog
+    v-if="!auth.getUser"
+    v-model:show="showForgotPasswordDialog"
+  />
+  <ResetPasswordDialog v-if="!auth.getUser" />
+
   <div class="flex items-center justify-center min-h-screen">
     <div class="border-2 border-primary-600 rounded-md p-8 shadow shadow-primary w-96">
       <div class="flex flex-col gap-1">

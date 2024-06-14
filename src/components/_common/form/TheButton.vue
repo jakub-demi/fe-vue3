@@ -11,6 +11,7 @@ type PropsT = {
   icon?: string
   disabled?: boolean
   autofocus?: boolean
+  handleKeydownEnter?: Function
 }
 
 const props = withDefaults(defineProps<PropsT>(), {
@@ -52,6 +53,15 @@ const clickHandler = (event: InteractEventT) => {
 
   props.handleClick(event)
 }
+
+const enterKeydownHandler = (event: InteractEventT) => {
+  if (!props.handleKeydownEnter) {
+    clickHandler(event)
+    return
+  }
+
+  props.handleKeydownEnter(event)
+}
 </script>
 
 <template>
@@ -59,7 +69,8 @@ const clickHandler = (event: InteractEventT) => {
     :disabled="disabled"
     :loading="loading"
     :type="getType()"
-    @click="(event) => clickHandler(event)"
+    @click="clickHandler"
+    @keydown.enter="enterKeydownHandler"
     :class="className"
     :autofocus="autofocus"
   >

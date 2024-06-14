@@ -1,4 +1,10 @@
-import type { ErrorResponseDataT, SeverityT, UserT, ButtonSubmitTypeT } from "@/types"
+import type {
+  ErrorResponseDataT,
+  SeverityT,
+  UserT,
+  ButtonSubmitTypeT,
+  StrKeyAnyValT,
+} from "@/types"
 import type { AxiosError as AxiosErrorT, AxiosResponse } from "axios"
 import { AxiosError } from "axios"
 import type { Ref } from "vue"
@@ -18,7 +24,7 @@ export const setToast = (message: string, severity?: SeverityT, title?: string, 
 
   toast.add({
     severity: severity ?? "success",
-    summary: title ?? severity === "error" ? "Failure" : "Info",
+    summary: title ?? (severity === "error" ? "Failure" : "Info"),
     detail: message,
     life: life && life > 0 ? life : 3000,
   })
@@ -51,7 +57,12 @@ export const handleResData = <T>(response: AxiosResponse, ref: Ref<T>) => {
   ref.value = response.data.data
 }
 
-export const handleInputErrors = <T>(error: AxiosError, ref: Ref<T>, showToast: boolean = true) => {
+export const handleInputErrors = <T>(
+  error: AxiosError,
+  ref: Ref<T>,
+  showToast: boolean = true,
+  toastTitle?: string
+) => {
   const errData = error.response?.data as ErrorResponseDataT
 
   if (!error.response?.data) return
@@ -70,7 +81,7 @@ export const handleInputErrors = <T>(error: AxiosError, ref: Ref<T>, showToast: 
 
   ref.value = errors as T
 
-  showToast && setToast(message, "error")
+  showToast && setToast(message, "error", toastTitle)
 }
 
 export const formatDate = (datetime: Date | string): string => {
@@ -317,4 +328,12 @@ export const calcCostWithVat = (
 
 export const areObjectsEqual = (object1: object, object2: object): boolean => {
   return isEqual(object1, object2)
+}
+
+export const objectToFormData = (obj: StrKeyAnyValT): FormData => {
+  const formData = new FormData()
+  Object.keys(obj).forEach((key) => {
+    formData.append(key, obj[key] instanceof Blob ? obj[key] : obj[key].toString())
+  })
+  return formData
 }

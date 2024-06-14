@@ -4,7 +4,7 @@ import TheButton from "@/components/_common/form/TheButton.vue"
 import InputField from "@/components/_common/form/InputField.vue"
 import { onMounted, ref, watch } from "vue"
 import doAxios from "@/utils/doAxios"
-import { handleInputErrors, objectToFormData, setErrorToast } from "@/utils"
+import { handleInputErrors, setErrorToast } from "@/utils"
 import dialogStore from "@/stores/dialogStore"
 import texts from "@/texts"
 
@@ -55,7 +55,7 @@ onMounted(() => {
     setErrorToast(
       `No ${!queryParams["email"] && !queryParams["token"] ? "email and token are" : !queryParams["email"] && queryParams["token"] ? "email is" : "token is"} present in Password Reset link!`,
       4500,
-      "Password Reset"
+      texts.login.resetPassword.noQueryParamsErrorToast.title
     )
   } else {
     show.value = true

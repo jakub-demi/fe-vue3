@@ -27,6 +27,9 @@ const texts = {
     },
     resetPassword: {
       passwordChangeSuccess: "Your password change was successful, you can login now.",
+      noQueryParamsErrorToast: {
+        title: "Password Reset",
+      },
       header: "Change Password",
       description: "Now you can change your password.",
       labels: {

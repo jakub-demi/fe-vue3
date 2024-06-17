@@ -49,6 +49,11 @@ const texts = {
       all: "All Orders",
       create: "Create Order",
     },
+    orderCategories: {
+      index: "Order Categories",
+      all: "All Order Categoties",
+      create: "Create Order Category",
+    },
     users: {
       index: "Users",
       all: "All Users",
@@ -180,6 +185,20 @@ const texts = {
           vat: "VAT",
           costWithVat: "Cost with VAT",
         },
+      },
+    },
+  },
+  orderCategories: {
+    table: {
+      headers: {
+        name: "Category Name",
+        slug: "Category Slug",
+      },
+    },
+    form: {
+      labels: {
+        name: "Category Name",
+        slug: "Category Slug",
       },
     },
   },

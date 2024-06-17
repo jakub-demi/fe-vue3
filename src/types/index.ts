@@ -184,6 +184,24 @@ export type OrderCategoryT = {
   slug: string
 }
 
+export type OrderCategoryDataTableT = {
+  id: number
+  name: string
+  slug: string
+}
+
+export type OrderCategoryTableSlotPropsT = {
+  data: OrderCategoryDataTableT
+}
+
+export type OrderCategoryDataT = {
+  name: string
+}
+
+export type OrderCategoryErrorsT = {
+  name?: string[]
+}
+
 export type OrderStatusT = {
   name: string
   value: string

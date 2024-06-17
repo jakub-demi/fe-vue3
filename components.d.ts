@@ -35,6 +35,7 @@ declare module 'vue' {
     Message: typeof import('primevue/message')['default']
     MobileMenu: typeof import('./src/components/_layout/MobileMenu.vue')['default']
     MultiSelect: typeof import('primevue/multiselect')['default']
+    OrderCategoryForm: typeof import('./src/components/pages/dashboard/order-categories/OrderCategoryForm.vue')['default']
     OrderForm: typeof import('./src/components/pages/dashboard/orders/OrderForm.vue')['default']
     OrderItemForm: typeof import('./src/components/pages/dashboard/orders/order-items/OrderItemForm.vue')['default']
     PanelMenu: typeof import('primevue/panelmenu')['default']

@@ -24,6 +24,21 @@ const items: MenuItem[] = [
       },
     ],
   },
+  //! Order Categories
+  {
+    label: texts.leftMenu.orderCategories.index,
+    icon: "pi pi-box",
+    items: [
+      {
+        label: texts.leftMenu.orderCategories.all,
+        command: () => go("order-categories"),
+      },
+      {
+        label: texts.leftMenu.orderCategories.create,
+        command: () => go("order-categories.create"),
+      },
+    ],
+  },
   //! Users
   {
     label: texts.leftMenu.users.index,

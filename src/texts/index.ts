@@ -141,6 +141,7 @@ const texts = {
       },
       additionalActions: {
         orderItems: "Order Items",
+        downloadAsPdf: "Download as PDF",
         statusHistory: "Status History",
       },
     },

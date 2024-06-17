@@ -1,7 +1,7 @@
 import doAxios from "@/utils/doAxios"
-import { handleResData } from "@/utils"
+import { handleResData, setAxiosErrorToast } from "@/utils"
 import type { Ref } from "vue"
-import type { OrderStatusT, SelectOptionT } from "@/types"
+import type { OrderStatusHistoryT, OrderStatusT, SelectOptionT } from "@/types"
 import { ref } from "vue"
 
 export const getOrderStatuses = async (orderStatuses: Ref<OrderStatusT[]>) => {
@@ -20,4 +20,15 @@ export const getOrderStatusesSelectOptions = async (orderStatusesOptions: Ref<Se
       })
     })
   })
+}
+
+export const getOrderStatusesForOrder = async (
+  orderId: number,
+  orderStatuses: Ref<OrderStatusHistoryT[]>
+) => {
+  doAxios(`/orders/${orderId}/status-history`, "get", true)
+    .then((res) => {
+      orderStatuses.value = res.data.data as OrderStatusHistoryT[]
+    })
+    .catch(setAxiosErrorToast)
 }

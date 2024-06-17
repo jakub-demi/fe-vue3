@@ -209,6 +209,18 @@ export type OrderStatusT = {
   slug: string
 }
 
+export type OrderStatusHistoryT = {
+  id: number
+  order: OrderT
+  status: OrderStatusT
+  user: UserT
+  created_at: Date | string
+}
+
+export type OrderStatusHistoryTableSlotPropsT = {
+  data: OrderStatusHistoryT
+}
+
 export type ActionsMenuPermissionsT = {
   view: boolean
   edit: boolean

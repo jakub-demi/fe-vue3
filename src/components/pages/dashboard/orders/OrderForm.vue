@@ -6,7 +6,13 @@ import authStore from "@/stores/authStore"
 import { createOrder, getOrderById, updateOrder } from "@/utils/services/orderService"
 import texts from "@/texts"
 import FormWrap from "@/components/_common/form/FormWrap.vue"
-import { dateIfNotEmpty, getSubmitBtnType, strLen, tomorrowDate } from "@/utils"
+import {
+  accessDeniedRedirect,
+  dateIfNotEmpty,
+  getSubmitBtnType,
+  strLen,
+  tomorrowDate,
+} from "@/utils"
 import DateTimePicker from "@/components/_common/form/DateTimePicker.vue"
 import TheSelect from "@/components/_common/form/TheSelect.vue"
 import { getUsersSelectOptions } from "@/utils/services/userService"
@@ -72,6 +78,10 @@ onMounted(async () => {
 
   if (props.id) {
     await getOrderById(props.id, submitData, originalDates)
+  }
+
+  if (userId && !submitData.value.order_users.includes(userId) && !props.viewMode) {
+    accessDeniedRedirect("orders")
   }
 
   formLoading.value = false

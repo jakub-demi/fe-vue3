@@ -9,6 +9,10 @@ import OrderItemsIndex from "@/views/dashboard/orders/order-items/OrderItemsInde
 import OrderItemCreate from "@/views/dashboard/orders/order-items/OrderItemCreate.vue"
 import OrderItemView from "@/views/dashboard/orders/order-items/OrderItemView.vue"
 import OrderItemEdit from "@/views/dashboard/orders/order-items/OrderItemEdit.vue"
+import OrderCategoriesIndex from "@/views/dashboard/order-categories/OrderCategoriesIndex.vue"
+import OrderCategoryCreate from "@/views/dashboard/order-categories/OrderCategoryCreate.vue"
+import OrderCategoryView from "@/views/dashboard/order-categories/OrderCategoryView.vue"
+import OrderCategoryEdit from "@/views/dashboard/order-categories/OrderCategoryEdit.vue"
 import UsersIndex from "@/views/dashboard/users/UsersIndex.vue"
 import UserCreate from "@/views/dashboard/users/UserCreate.vue"
 import UserView from "@/views/dashboard/users/UserView.vue"
@@ -103,6 +107,39 @@ const dashboardRoutes: RouteRecordRaw[] = [
     component: OrderItemEdit,
     meta: {
       title: "Order Item - Edit",
+    },
+  },
+  //! Order Categories Routes
+  {
+    path: "order-categories",
+    name: "order-categories",
+    component: OrderCategoriesIndex,
+    meta: {
+      title: "Order Categories",
+    },
+  },
+  {
+    path: "order-categories/create",
+    name: "order-categories.create",
+    component: OrderCategoryCreate,
+    meta: {
+      title: "Order Category - Create",
+    },
+  },
+  {
+    path: "order-categories/view/:id",
+    name: "order-categories.view",
+    component: OrderCategoryView,
+    meta: {
+      title: "Order Category - View",
+    },
+  },
+  {
+    path: "order-categories/edit/:id",
+    name: "order-categories.edit",
+    component: OrderCategoryEdit,
+    meta: {
+      title: "Order Category - Edit",
     },
   },
   //! Users Routes

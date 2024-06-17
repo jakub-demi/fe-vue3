@@ -54,23 +54,6 @@ const items: MenuItem[] = [
       },
     ],
   },
-  {
-    label: "Test Items",
-    items: [
-      {
-        label: "Item 1",
-        icon: "pi pi-list",
-        command: () => {
-          //
-        },
-      },
-      // {
-      //   label: "Test Page",
-      //   icon: "pi pi-list",
-      //   command: () => go("test"),
-      // },
-    ],
-  },
 ]
 </script>
 

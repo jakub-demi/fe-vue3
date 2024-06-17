@@ -4,7 +4,7 @@ import type { MenuItem } from "primevue/menuitem"
 import type { InteractEventT } from "@/types"
 import texts from "@/texts"
 import authStore from "@/stores/authStore"
-import router from "@/router"
+import { go } from "@/router"
 import { getUserAvatar, getUserInitials } from "@/utils"
 
 const userMenu = ref()
@@ -22,9 +22,7 @@ const userMenuItems: MenuItem[] = [
       {
         label: texts.dashboardLayout.topbar.userProfileMenu.items.userMenu.profile,
         icon: "pi pi-user",
-        command: () => {
-          router.push({ name: "profile" })
-        },
+        command: () => go("profile"),
       },
     ],
   },
@@ -34,9 +32,7 @@ const userMenuItems: MenuItem[] = [
       {
         label: texts.dashboardLayout.topbar.userProfileMenu.items.auth.logout,
         icon: "pi pi-sign-out",
-        command: () => {
-          logout()
-        },
+        command: () => logout(),
       },
     ],
   },

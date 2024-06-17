@@ -38,7 +38,6 @@ declare module 'vue' {
     OrderCategoryForm: typeof import('./src/components/pages/dashboard/order-categories/OrderCategoryForm.vue')['default']
     OrderForm: typeof import('./src/components/pages/dashboard/orders/OrderForm.vue')['default']
     OrderItemForm: typeof import('./src/components/pages/dashboard/orders/order-items/OrderItemForm.vue')['default']
-    OrderStatusHistory: typeof import('./src/components/pages/dashboard/orders/OrderStatusHistory.vue')['default']
     OrderStatusHistoryDialog: typeof import('./src/components/pages/dashboard/orders/OrderStatusHistoryDialog.vue')['default']
     PanelMenu: typeof import('primevue/panelmenu')['default']
     Password: typeof import('primevue/password')['default']

@@ -166,6 +166,17 @@ const texts = {
         selectStatus: "Select a Status",
       },
     },
+    statusHistory: {
+      header: "Order Status History",
+      table: {
+        headers: {
+          orderNumber: "Order Number",
+          status: "Status",
+          user: "Changed By",
+          createdAt: "Changed At",
+        },
+      },
+    },
 
     orderItems: {
       table: {

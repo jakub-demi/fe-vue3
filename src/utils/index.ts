@@ -108,7 +108,9 @@ export const getUserInitials = (): string => {
   return getInitialsForUser(user)
 }
 
-export const getInitialsForUser = (user: UserT): string => {
+export const getInitialsForUser = (user: UserT | null): string => {
+  if (!user) return "U"
+
   const parts = user.fullName.split(" ")
   const initials = parts.map((part) => {
     return part.substring(0, 1).toUpperCase()

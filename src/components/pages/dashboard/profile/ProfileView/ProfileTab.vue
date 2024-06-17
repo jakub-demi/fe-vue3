@@ -14,6 +14,7 @@ import type { UpdateProfileFormT, UserProfileErrorT } from "@/types"
 import TheButton from "@/components/_common/form/TheButton.vue"
 import FileInput from "@/components/_common/form/FileInput.vue"
 import InputField from "@/components/_common/form/InputField.vue"
+import TheAvatar from "@/components/_common/TheAvatar.vue"
 
 const auth = authStore()
 
@@ -51,12 +52,11 @@ const save = () => {
 
 <template>
   <div v-if="userData">
-    <Avatar
-      :label="!getUserAvatar() ? getUserInitials() : undefined"
-      :image="getUserAvatar() ? getUserAvatar() : undefined"
-      :pt="{ root: 'size-20', label: 'text-4xl' }"
-      class="flex items-center justify-center mb-2 rounded-full border-2 border-black"
-      shape="circle"
+    <TheAvatar
+      :user="auth.getUser"
+      size="size-20"
+      label-size="text-4xl"
+      class-name="mb-2"
     />
     <form @submit.prevent="save">
       <InputField

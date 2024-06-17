@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
-import { getAvatarForUser, getInitialsForUser } from "@/utils"
+import { getAvatarForUser, getInitialsForUser, handlePdfDownload, setErrorToast } from "@/utils"
 import type { OrderDataTableT, OrdersTableSlotPropsT, OrderStatusT, UserT } from "@/types"
 import { CheckIcon, XMarkIcon } from "@heroicons/vue/24/outline"
 import IconSizeWrap from "@/components/icons/IconSizeWrap.vue"
@@ -9,6 +9,7 @@ import DataGrid from "@/components/dataTable/DataGrid.vue"
 import { getOrdersForTable } from "@/utils/services/orderService"
 import texts from "@/texts"
 import router from "@/router"
+import type { MenuItem } from "primevue/menuitem"
 
 const ordersTable = ref<OrderDataTableT[]>([])
 const loading = ref<boolean>(true)
@@ -34,6 +35,36 @@ const showOrderItems = (id: number) => {
 
 const showOrderStatusHistory = (id: number) => {
   //todo:dev add order status history dialog window with order status histories
+}
+
+const downloadAsPdf = (orderNumber: number, orderId: number) => {
+  const errMsg = handlePdfDownload(`/orders/${orderId}/generate-pdf`, `Order_${orderNumber}`)
+  if (!errMsg) return
+
+  setErrorToast(errMsg)
+}
+
+const additionalActions = (slotProps: OrdersTableSlotPropsT): MenuItem[] => {
+  const actions: MenuItem[] = [
+    {
+      label: texts.orders.table.additionalActions.statusHistory,
+      icon: "pi pi-history",
+      command: () => showOrderStatusHistory(slotProps.data.id),
+    },
+    {
+      label: texts.orders.table.additionalActions.downloadAsPdf,
+      icon: "pi pi-file-pdf",
+      command: () => downloadAsPdf(slotProps.data.order_number, slotProps.data.id),
+    },
+  ]
+  if (slotProps.data.has_access) {
+    actions.unshift({
+      label: texts.orders.table.additionalActions.orderItems,
+      icon: "pi pi-shopping-bag",
+      command: () => showOrderItems(slotProps.data.id),
+    })
+  }
+  return actions
 }
 
 const noOrderStatus: OrderStatusT = {
@@ -139,18 +170,7 @@ const noOrderStatus: OrderStatusT = {
             :id="slotProps.data.id"
             route="orders"
             :handle-reload-async-fn="handleDataLoad"
-            :additional-actions="[
-              {
-                label: texts.orders.table.additionalActions.orderItems,
-                icon: 'pi pi-shopping-bag',
-                command: () => showOrderItems(slotProps.data.id),
-              },
-              {
-                label: texts.orders.table.additionalActions.statusHistory,
-                icon: 'pi pi-history',
-                command: () => showOrderStatusHistory(slotProps.data.id),
-              },
-            ]"
+            :additional-actions="additionalActions(slotProps)"
             :permissions="{
               view: true,
               edit: slotProps.data.has_access,
